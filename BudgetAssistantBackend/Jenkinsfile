@@ -1,0 +1,38 @@
+
+node {
+    Map<String, String> buildParameters = new HashMap<String, String>()
+
+    buildParameters.put('imageRepository', 'lednev/budget-assistant.api')
+
+    sh('export GIT_SSL_NO_VERIFY=1')
+    stage('Clone repository') {
+        checkout scm
+    }
+
+    stage('Collect variables') {
+        gitCommit = sh(script: 'git describe --always', returnStdout: true)
+        buildParameters.put('gitCommit', gitCommit.trim())
+    }
+
+    stage('Check environment') {
+        switch (env.BRANCH_NAME) {
+            case 'develop': {
+                    buildParameters.put('taskDefinition', 'development')
+                    return
+            }
+            case 'main': {
+                    buildParameters.put('taskDefinition', 'production')
+                    return
+            }
+        }
+    }
+
+    stage('Build service image') {
+        sh("docker build -t ${buildParameters.get('imageRepository')}:${env.BRANCH_NAME}-${buildParameters.get('gitCommit')}" +
+            ' -f ./BudgetAssistant.API/Dockerfile .')
+    }
+
+    stage('Push service image to repository') {
+        sh("docker push ${buildParameters.get('imageRepository')}:${env.BRANCH_NAME}-${buildParameters.get('gitCommit')}")
+    }
+}

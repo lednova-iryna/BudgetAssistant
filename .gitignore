@@ -1,0 +1,6 @@
+**/.vs
+**/jenkins/jenkins_home/*
+**/nginx/ssl/*
+**/bin
+**/obj
+**/.env*

@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  budget-assistant-api:
+    image: budget-assistant.api.dev
+    container_name: budget-assistant.api.dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "9001:80"
+      - "9000:443"  

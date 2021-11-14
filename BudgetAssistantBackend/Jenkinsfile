@@ -16,14 +16,13 @@ node {
 
     stage('Check environment') {
         switch (env.BRANCH_NAME) {
-            case 'develop': {
-                    buildParameters.put('taskDefinition', 'development')
-                    return
-            }
-            case 'main': {
-                    buildParameters.put('taskDefinition', 'production')
-                    return
-            }
+            case 'develop':
+                buildParameters.put('taskDefinition', 'development')
+                return
+
+            case 'main':
+                buildParameters.put('taskDefinition', 'production')
+                return
         }
     }
 

@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  budget-assistant-api.dev:
-    image: lednev/budget-assistant.api:development
-    container_name: budget-assistant.api.dev
+  budget-assistant-api.prod:
+    image: lednev/budget-assistant.api:production
+    container_name: budget-assistant.api.prod
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80"

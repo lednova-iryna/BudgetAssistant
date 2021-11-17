@@ -28,7 +28,7 @@ node {
 
     stage('Build service image') {
         sh("docker build -t ${buildParameters.get('imageRepository')}:${env.BRANCH_NAME}-${buildParameters.get('gitCommit')}" +
-            ' -f ./BudgetAssistant.API/Dockerfile .')
+            ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
     }
 
     stage('Push service image to repository') {

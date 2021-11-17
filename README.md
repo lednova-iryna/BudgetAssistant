@@ -2,6 +2,12 @@
 
 # Backend configuration
 
+### Jenkins
+
+#### Plugins
+
+- https://plugins.jenkins.io/docker-workflow/
+
 ### Create Keys for self-signed HTTPS
 
 #### Dev

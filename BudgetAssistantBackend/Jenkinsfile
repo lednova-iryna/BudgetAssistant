@@ -1,8 +1,9 @@
 
 node {
     Map<String, String> buildParameters = new HashMap<String, String>()
-
     buildParameters.put('imageRepository', 'lednev/budget-assistant.api')
+
+    def dockerImage
 
     sh('export GIT_SSL_NO_VERIFY=1')
     stage('Clone repository') {
@@ -18,20 +19,23 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 buildParameters.put('taskDefinition', 'development')
-                return
+                break
 
             case 'main':
                 buildParameters.put('taskDefinition', 'production')
-                return
+                break
         }
-    }
+        // -${buildParameters.get('gitCommit')
+        buildParameters.put('imageFullName', "${buildParameters.get('imageRepository')}:${ buildParameters.put('taskDefinition')}}")
+        }
 
     stage('Build service image') {
-        sh("docker build -t ${buildParameters.get('imageRepository')}:${env.BRANCH_NAME}-${buildParameters.get('gitCommit')}" +
-            ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
+        dockerImage = docker.build(buildParameters.get('imageFullName'), ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
     }
 
     stage('Push service image to repository') {
-        sh("docker push ${buildParameters.get('imageRepository')}:${env.BRANCH_NAME}-${buildParameters.get('gitCommit')}")
+        docker.withRegistry('https://hub.docker.com/', 'DockerHub') {
+            dockerImage.push()
+        }
     }
 }

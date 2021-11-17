@@ -26,8 +26,9 @@ node {
                 break
         }
         // -${buildParameters.get('gitCommit')
-        buildParameters.put('imageFullName', "${buildParameters.get('imageRepository')}:${ buildParameters.put('taskDefinition')}}")
-        }
+        String imageFullName = "${buildParameters.get('imageRepository')}:${ buildParameters.put('taskDefinition')}}"
+        buildParameters.put('imageFullName', imageFullName)
+    }
 
     stage('Build service image') {
         dockerImage = docker.build(buildParameters.get('imageFullName'), ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
@@ -38,4 +39,4 @@ node {
             dockerImage.push()
         }
     }
-}
+    }

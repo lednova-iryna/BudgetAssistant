@@ -41,8 +41,8 @@ node {
     }
 
     stage('Update server app'){
-        sh("docker compose -f docker-compose.${buildParameters.get('taskDefinition')}.yml pull")
-        sh("docker compose -f docker-compose.${buildParameters.get('taskDefinition')}.yml up --detach")
+        sh("docker-compose -f docker-compose.${buildParameters.get('taskDefinition')}.yml pull")
+        sh("docker-compose -f docker-compose.${buildParameters.get('taskDefinition')}.yml up --detach")
         sh("docker image prune -f")
     }
 }

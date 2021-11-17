@@ -2,19 +2,18 @@ version: "3.8"
 
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    image:  budget-assistant.jenkins
+    build:
+      context: ./jenkins
     privileged: true
     user: root
     ports:
       - 8080:8080
       - 50000:50000
-    container_name: jenkins
+    container_name: budget-assistant.jenkins
     volumes:
       - ./jenkins/jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /usr/bin/docker-compose:/usr/bin/docker-compose:ro
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"  
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - budget-assistant      
 

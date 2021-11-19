@@ -1,6 +1,9 @@
 FROM jenkins/jenkins:lts
 ENV DOCKER_VERSION=20.10.9
 ENV DOCKER_COMPOSE_VERSION=2.1.1
+ENV DOTNET_VERSION=5.0
+ENV DOTNET_PATH=/usr/.dotnet
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 USER root
 
@@ -18,12 +21,15 @@ ENV PATH="/usr/local/bin/docker:${PATH}"
 
 # Based on instaructions from https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
 # install .Net automatically
-ENV DOTNET_PATH=/usr/.dotnet
+
 RUN mkdir ${DOTNET_PATH}
 RUN curl -L https://dot.net/v1/dotnet-install.sh -o ${DOTNET_PATH}/dotnet-install.sh  && \
     chmod +x ${DOTNET_PATH}/dotnet-install.sh && \
-    bash ${DOTNET_PATH}/dotnet-install.sh --channel 5.0 --install-dir ${DOTNET_PATH}/
+    bash ${DOTNET_PATH}/dotnet-install.sh --channel ${DOTNET_VERSION} --install-dir ${DOTNET_PATH}/
 
-ENV PATH="${DOTNET_PATH}/:${PATH}"
+ENV PATH="/root/.dotnet/tools/:${DOTNET_PATH}/:${PATH}"
+
+RUN dotnet tool install -g dotnet-sonarscanner
 
 USER jenkins
+

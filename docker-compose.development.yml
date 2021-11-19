@@ -12,6 +12,15 @@ services:
     networks:
       - budget-assistant
 
+  budget-assistant-ui.dev:
+    image: lednev/budget-assistant.ui:development
+    container_name: budget-assistant.ui.dev
+    build: ./BudgetAssistantFrontend
+    ports:
+      - "80"
+    networks:
+      - budget-assistant
+
 networks:
   budget-assistant:
     external: true

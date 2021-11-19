@@ -1,0 +1,16 @@
+
+node {
+    sh('export GIT_SSL_NO_VERIFY=1')
+    stage('Clone repository') {
+        checkout scm
+    } 
+
+    stage('Sonar'){
+        // Name should be the same as name in the Jenkins Configuration (/configure URL, 'SonarQube servers' section)
+        withSonarQubeEnv(installationName: 'BudgetAssistant-Sonar') {
+            sh "dotnet /opt/sonarscanner/SonarScanner.MSBuild.dll begin /k:\"BudgetAssistant-Backend\""
+            sh "dotnet build ./BudgetAssistantBackend/BudgetAssistantBackend.sln"
+            sh "dotnet /opt/sonarscanner/SonarScanner.MSBuild.dll end"
+        }
+    }
+}

@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   jenkins:
-    image:  budget-assistant.jenkins
+    image: budget-assistant.jenkins
     build:
       context: ./jenkins
     privileged: true
@@ -15,8 +15,42 @@ services:
       - ./jenkins/jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - budget-assistant      
+      - budget-assistant
+  sonarqube:
+    image: sonarqube:lts
+    container_name: budget-assistant.sonarqube
+    ports:
+      - 9000:9000
+    volumes:
+      - ./sonar/data:/opt/sonarqube/data
+      - ./sonar/logs:/opt/sonarqube/logs
+      - ./sonar/extensions:/opt/sonarqube/extensions
+    # depends_on:
+
+    #   - db
+    environment:
+      # - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar
+      # - SONAR_JDBC_USERNAME=${POSTGRES_USER}
+      # - SONAR_JDBC_PASSWORD=${POSTGRES_PASS}
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    networks:
+      - budget-assistant
+
+  db:
+    image: postgres:12
+    container_name: budget-assistant.db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+    volumes:
+      - budget-assistant-postgres:/var/lib/postgresql/data
+    networks:
+      - budget-assistant
 
 networks:
   budget-assistant:
+    external: true
+volumes:
+  budget-assistant-postgres:
     external: true

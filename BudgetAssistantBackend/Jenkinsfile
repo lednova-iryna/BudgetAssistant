@@ -9,13 +9,11 @@ node {
     stage('Clone repository') {
         checkout scm
     }
-
-    stage('Collect variables') {
+    
+    stage('Check environment') {
         gitCommit = sh(script: 'git describe --always', returnStdout: true)
         buildParameters.put('gitCommit', gitCommit.trim())
-    }
 
-    stage('Check environment') {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 buildParameters.put('taskDefinition', 'development')
@@ -30,11 +28,8 @@ node {
         buildParameters.put('imageFullName', imageFullName)
     }
 
-    stage('Build service image') {
+    stage('Build and Push service image') {
         dockerImage = docker.build(buildParameters.get('imageFullName'), ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
-    }
-
-    stage('Push service image to repository') {
         docker.withRegistry('', 'DockerHub') {
             dockerImage.push()
         }

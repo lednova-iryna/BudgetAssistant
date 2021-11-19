@@ -9,7 +9,7 @@ import BASelect from "../input/BA-Select";
 
 const PostForm = () => {
   const { posts, setPost } = useContext(PostContext);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date());
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -40,11 +40,7 @@ const PostForm = () => {
           flexDirection: "row",
         }}
       >
-        <BADatePicker
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-         
-        />
+        <BADatePicker value={date} onChange={(newValue) => setDate(newValue)} />
         <BASelect
           //    flex-direction: initial;
           value={category}

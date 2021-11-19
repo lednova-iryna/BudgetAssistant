@@ -15,14 +15,13 @@ const PostItem = ({ post }) => {
   const classes = useTableStyles();
   return (
     <TableRow className={classes.tableRow}>
-      <TableCell>{post.date}</TableCell>
+      <TableCell>{post.date.format("DD/MM/YYYY")}</TableCell>
       <TableCell>{post.category}</TableCell>
       <TableCell>{post.description}</TableCell>
       <TableCell>{post.amount}</TableCell>
       <TableCell>{post.postType}</TableCell>
-      <TableCell className={classes.tableButtonCell}> 
-        <PostButtons  >
-        </PostButtons>
+      <TableCell className={classes.tableButtonCell}>
+        <PostButtons></PostButtons>
       </TableCell>
     </TableRow>
   );

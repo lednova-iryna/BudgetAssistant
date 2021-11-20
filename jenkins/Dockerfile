@@ -2,7 +2,7 @@ FROM jenkins/jenkins:lts
 ENV DOCKER_VERSION=20.10.9
 ENV DOCKER_COMPOSE_VERSION=2.1.1
 ENV DOTNET_VERSION=5.0
-ENV DOTNET_PATH=/usr/.dotnet
+ENV DOTNET_ROOT=/usr/.dotnet
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 USER root
@@ -22,14 +22,27 @@ ENV PATH="/usr/local/bin/docker:${PATH}"
 # Based on instaructions from https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
 # install .Net automatically
 
-RUN mkdir ${DOTNET_PATH}
-RUN curl -L https://dot.net/v1/dotnet-install.sh -o ${DOTNET_PATH}/dotnet-install.sh  && \
-    chmod +x ${DOTNET_PATH}/dotnet-install.sh && \
-    bash ${DOTNET_PATH}/dotnet-install.sh --channel ${DOTNET_VERSION} --install-dir ${DOTNET_PATH}/
+RUN mkdir ${DOTNET_ROOT}
+RUN curl -L https://dot.net/v1/dotnet-install.sh -o ${DOTNET_ROOT}/dotnet-install.sh  && \
+    chmod +x ${DOTNET_ROOT}/dotnet-install.sh && \
+    bash ${DOTNET_ROOT}/dotnet-install.sh --channel ${DOTNET_VERSION} --install-dir ${DOTNET_ROOT}/
 
-ENV PATH="/root/.dotnet/tools/:${DOTNET_PATH}/:${PATH}"
+ENV PATH="/root/.dotnet/tools/:${DOTNET_ROOT}/:${PATH}"
 
 RUN dotnet tool install -g dotnet-sonarscanner
+
+
+# Add self-signed certificate 
+# COPY ./nginx/ssl /usr/ssl
+# COPY ./nginx/ssl /etc/ssl/certs
+COPY ./nginx/ssl /usr/local/share/ca-certificates
+RUN chmod 644 /usr/local/share/ca-certificates/budget-assistant-dev-ca.crt 
+RUN update-ca-certificates
+# ENV NODE_EXTRA_CA_CERTS=/usr/ssl/budget-assistant-dev-ca.pem
+
+# RUN cd /opt/java/openjdk/lib/security
+# RUN keytool -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -noprompt -alias BudgetAssistant -import -file /usr/ssl/budget-assistant-dev-ca.pem
+# keytool -trustcacerts -cacerts -storepass changeit -noprompt -alias BudgetAssistant -import -file /etc/ssl/certs/budget-assistant-dev-ca.pem
 
 USER jenkins
 

@@ -32,17 +32,6 @@ ENV PATH="/root/.dotnet/tools/:${DOTNET_ROOT}/:${PATH}"
 RUN dotnet tool install -g dotnet-sonarscanner
 
 
-# Add self-signed certificate 
-# COPY ./nginx/ssl /usr/ssl
-# COPY ./nginx/ssl /etc/ssl/certs
-COPY ./nginx/ssl /usr/local/share/ca-certificates
-RUN chmod 644 /usr/local/share/ca-certificates/budget-assistant-dev-ca.crt 
-RUN update-ca-certificates
-# ENV NODE_EXTRA_CA_CERTS=/usr/ssl/budget-assistant-dev-ca.pem
-
-# RUN cd /opt/java/openjdk/lib/security
-# RUN keytool -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -noprompt -alias BudgetAssistant -import -file /usr/ssl/budget-assistant-dev-ca.pem
-# keytool -trustcacerts -cacerts -storepass changeit -noprompt -alias BudgetAssistant -import -file /etc/ssl/certs/budget-assistant-dev-ca.pem
 
 USER jenkins
 

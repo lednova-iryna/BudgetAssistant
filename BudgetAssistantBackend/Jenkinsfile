@@ -1,5 +1,8 @@
 
 node {
+    def sendNotification(message){
+        sh("curl https://api.telegram.org/bot2118332947:AAHSpNoS7TuUmE83eEAQ8kqJp110wxu9rsg/sendMessage?chat_id=-1001707520031&parse_mode=HTML&text=$message")
+    }
     Map<String, String> buildParameters = new HashMap<String, String>()
     buildParameters.put('imageRepository', 'lednev/budget-assistant.api')
 
@@ -44,10 +47,6 @@ node {
         sh("docker image prune -f")
 
         sendNotification("<b>BudgetAssistant.API</b> - ${buildParameters.get('taskDefinition')}%0AUp and running!")
-    }
-
-    def sendNotification(message){
-        sh("curl https://api.telegram.org/bot2118332947:AAHSpNoS7TuUmE83eEAQ8kqJp110wxu9rsg/sendMessage?chat_id=-1001707520031&parse_mode=HTML&text=$message")
     }
 }
 

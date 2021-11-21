@@ -8,7 +8,7 @@ node {
   sh('export GIT_SSL_NO_VERIFY=1')
   stage('Clone repository') {
      
-    sendNotification("<b>${env.JOB_NAME}</b>:%0Abuild started")
+    sendNotification("<b>${env.JOB_NAME}</b>:%0ABuild started")
      
     try {
       checkout scm

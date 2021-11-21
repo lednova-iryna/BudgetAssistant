@@ -8,10 +8,7 @@ node {
   sh('export GIT_SSL_NO_VERIFY=1')
   stage('Clone repository') {
      
-    sendNotification("""
-      <b>BudgetAssistant.API</b>: ${env.JOB_NAME}
-      build started
-    """)
+    sendNotification("<b>BudgetAssistant.API</b>: ${env.JOB_NAME}%0Abuild started")
      
     try {
       checkout scm
@@ -59,10 +56,7 @@ node {
       sh("docker-compose -p BudgetAssistant -f docker-compose.${buildParameters.get('taskDefinition')}.yml up --detach")
       sh('docker image prune -f')
 
-      sendNotification("""
-        <b>BudgetAssistant.API</b> - ${env.JOB_NAME}
-        Up and running!
-      """)
+      sendNotification("<b>BudgetAssistant.API</b> - ${env.JOB_NAME}%0AUp and running!")
     } catch (err) {
       handleError(err, buildParameters)
     }    
@@ -75,11 +69,7 @@ private void sendNotification(message) {
 
 private void handleError(Exception err) {
   currentBuild.result = 'FAILURE'
-  def msg = """
-      Build error!
-      Monitoring name: <b>${env.JOB_NAME}</b>
-      Logs: ${env.BUILD_URL}
-      """
+  def msg = "Build error!%0AMonitoring name: <b>${env.JOB_NAME}</b>%0ALogs: ${env.BUILD_URL}"
   sendNotification(msg)
 
   print err.message

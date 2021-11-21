@@ -1,52 +1,87 @@
 
 node {
-    def sendNotification(message){
-        sh("curl https://api.telegram.org/bot2118332947:AAHSpNoS7TuUmE83eEAQ8kqJp110wxu9rsg/sendMessage?chat_id=-1001707520031&parse_mode=HTML&text=$message")
+  Map<String, String> buildParameters = new HashMap<String, String>()
+  buildParameters.put('imageRepository', 'lednev/budget-assistant.api')
+
+  def dockerImage
+
+  sh('export GIT_SSL_NO_VERIFY=1')
+  stage('Clone repository') {
+     
+    sendNotification("""
+      <b>BudgetAssistant.API</b>: ${env.JOB_NAME}
+      build started
+    """)
+     
+    try {
+      checkout scm
+    } catch (err) {
+      handleError(err, buildParameters)
     }
-    Map<String, String> buildParameters = new HashMap<String, String>()
-    buildParameters.put('imageRepository', 'lednev/budget-assistant.api')
+  }
 
-    def dockerImage
+  stage('Check environment') {
+    try{
+      gitCommit = sh(script: 'git describe --always', returnStdout: true)
+      buildParameters.put('gitCommit', gitCommit.trim())
 
-    sh('export GIT_SSL_NO_VERIFY=1')
-    stage('Clone repository') {       
-        checkout scm
+      switch (env.BRANCH_NAME) {
+        case 'develop':
+          buildParameters.put('taskDefinition', 'development')
+          break
+
+        case 'main':
+          buildParameters.put('taskDefinition', 'production')
+          break
+      }
+      // -${buildParameters.get('gitCommit')
+      String imageFullName = "${buildParameters.get('imageRepository')}:${buildParameters.get('taskDefinition')}"
+      buildParameters.put('imageFullName', imageFullName)
+    } catch (err) {
+      handleError(err, buildParameters)
     }
-    
-    stage('Check environment') {
-        gitCommit = sh(script: 'git describe --always', returnStdout: true)
-        buildParameters.put('gitCommit', gitCommit.trim())
+  }
 
-        switch (env.BRANCH_NAME) {
-            case 'develop':
-                buildParameters.put('taskDefinition', 'development')
-                break
+  stage('Build and Push service image') {
+    try{
+      dockerImage = docker.build(buildParameters.get('imageFullName'), ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
+      docker.withRegistry('', 'DockerHub') {
+        dockerImage.push()
+      }
+    } catch (err) {
+      handleError(err, buildParameters)
+    }    
+  }
 
-            case 'main':
-                buildParameters.put('taskDefinition', 'production')
-                break
-        }
-        // -${buildParameters.get('gitCommit')
-        String imageFullName = "${buildParameters.get('imageRepository')}:${buildParameters.get('taskDefinition')}"
-        buildParameters.put('imageFullName', imageFullName)
+  stage('Update server app') {
+    try{    
+      sh("docker-compose -p BudgetAssistant -f docker-compose.${buildParameters.get('taskDefinition')}.yml pull")
+      sh("docker-compose -p BudgetAssistant -f docker-compose.${buildParameters.get('taskDefinition')}.yml up --detach")
+      sh('docker image prune -f')
 
-        sendNotification("<b>BudgetAssistant.API</b> - ${buildParameters.get('taskDefinition')}%0Abuild started")
-         
-    }
-
-    stage('Build and Push service image') {
-        dockerImage = docker.build(buildParameters.get('imageFullName'), ' -f ./BudgetAssistantBackend/BudgetAssistant.API/Dockerfile ./BudgetAssistantBackend/')
-        docker.withRegistry('', 'DockerHub') {
-            dockerImage.push()
-        }
-    }
-
-    stage('Update server app'){
-        sh("docker-compose -p BudgetAssistant -f docker-compose.${buildParameters.get('taskDefinition')}.yml pull")
-        sh("docker-compose -p BudgetAssistant -f docker-compose.${buildParameters.get('taskDefinition')}.yml up --detach")
-        sh("docker image prune -f")
-
-        sendNotification("<b>BudgetAssistant.API</b> - ${buildParameters.get('taskDefinition')}%0AUp and running!")
-    }
+      sendNotification("""
+        <b>BudgetAssistant.API</b> - ${env.JOB_NAME}
+        Up and running!
+      """)
+    } catch (err) {
+      handleError(err, buildParameters)
+    }    
+  }
 }
 
+private void sendNotification(message) {
+  sh("curl https://api.telegram.org/bot2118332947:AAHSpNoS7TuUmE83eEAQ8kqJp110wxu9rsg/sendMessage?chat_id=-1001707520031&parse_mode=HTML&text=$message")
+}
+
+private void handleError(Exception err) {
+  currentBuild.result = 'FAILURE'
+  def msg = """
+      Build error!
+      Monitoring name: <b>${env.JOB_NAME}</b>
+      Logs: ${env.BUILD_URL}
+      """
+  sendNotification(msg)
+
+  print err.message
+  throw err
+}

@@ -10,11 +10,11 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/config:/etc/nginx/conf.d:ro
-      - ./nginx/ssl:/etc/ssl/private:ro   
+      - ./nginx/ssl:/etc/ssl/private:ro
+      - ./nginx/ssl/.well-known:/etc/nginx/.well-known:ro
     networks:
       - budget-assistant
-         
+
 networks:
   budget-assistant:
     external: true
-    

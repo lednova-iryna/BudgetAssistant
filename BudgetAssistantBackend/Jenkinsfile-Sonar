@@ -8,9 +8,9 @@ node {
     stage('Sonar'){
         // Name should be the same as name in the Jenkins Configuration (/configure URL, 'SonarQube servers' section)
         withSonarQubeEnv(installationName: 'BudgetAssistant-Sonar') {
-            sh "dotnet /opt/sonarscanner/SonarScanner.MSBuild.dll begin /k:\"BudgetAssistant-Backend\""
+            sh 'dotnet sonarscanner begin /k:"BudgetAssistant" /d:sonar.host.url="https://lednova.net"  /d:sonar.login="2445db8a82d99a09e6e61f82a0e6bd217984b748" /d:sonar.clientcert.path=/usr/local/share/ca-certificates/budget-assistant-dev-ca.crt /d:sonar.clientcert.password=Qwerty1!'
             sh "dotnet build ./BudgetAssistantBackend/BudgetAssistantBackend.sln"
-            sh "dotnet /opt/sonarscanner/SonarScanner.MSBuild.dll end"
+            sh 'dotnet sonarscanner end /d:sonar.login="2445db8a82d99a09e6e61f82a0e6bd217984b748"'
         }
     }
 }

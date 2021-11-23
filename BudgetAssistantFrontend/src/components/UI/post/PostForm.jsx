@@ -38,11 +38,11 @@ const PostForm = () => {
           display: "flex",
           justifyContent: "center",
           flexDirection: "row",
+          height: "100%",
         }}
       >
         <BADatePicker value={date} onChange={(newValue) => setDate(newValue)} />
         <BASelect
-          //    flex-direction: initial;
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           label="Category"

@@ -3,9 +3,9 @@ import { makeStyles } from "@mui/styles";
 export const useTableStyles = makeStyles((theme) => ({
   table: { minWidth: 700 },
   tableContainer: {
+    marginTop: "15px",
     borderRadius: 15,
-    margin: "10px 10px",
-    maxWidth: 1000,
+    maxWidth: "100%",
   },
   tableHeaderCell: {
     fontWeight: "bold",

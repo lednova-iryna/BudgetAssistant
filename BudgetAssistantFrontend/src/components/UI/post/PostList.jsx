@@ -9,6 +9,7 @@ import { makeStyles, styled } from "@mui/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useTableStyles } from "../../../hooks/useTableStyle";
 import PostHeader from "./PostHeader";
+import { TableRow } from "material-ui";
 
 const PostList = () => {
   const { posts, setPost } = useContext(PostContext);
@@ -26,26 +27,31 @@ const PostList = () => {
   //   },
   // }));
 
-  if (!posts.length) {
-    return (
-      <TableContainer className={classes.tableContainer} component={Paper} >
-        <Table className={classes.table} aria-label="customized table">
-          <PostHeader />
-          <TableCell colspan="6" style={{ textAlign: "center" }}>
-            {" "}
-            There are no entries here!
-          </TableCell>
-        </Table>
-      </TableContainer>
-    );
-  }
+  // if (!posts.length) {
+  //   return (
+  //     <TableContainer className={classes.tableContainer} component={Paper}>
+  //       <Table className={classes.table} aria-label="customized table">
+  //         <PostHeader />
+  //       </Table>
+  //     </TableContainer>
+  //   );
+  // }
 
   return (
     <TableContainer className={classes.tableContainer} component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <PostHeader />
         <TableBody>
-          {posts && posts.map((post) => <PostItem post={post} key={post.id} />)}
+          {posts.length ? (
+            posts.map((post) => <PostItem post={post} key={post.id} />)
+          ) : (
+            <TableRow>
+              <TableCell colSpan="6" style={{ textAlign: "center" }}>
+                {" "}
+                There are no entries here!
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

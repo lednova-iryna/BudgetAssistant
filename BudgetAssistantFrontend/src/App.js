@@ -1,21 +1,18 @@
-import React, { useState } from "react";
-import PostForm from "./components/UI/post/PostForm";
-import PostList from "./components/UI/post/PostList";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { PostContext } from "./contexts/context";
-import { MuiThemeProvider } from "material-ui/styles";
+import MainAppBar from "./components/pages/MainAppBar";
+import Posts from "./components/pages/Posts";
+import Statistics from "./components/pages/Statistics";
 
 function App() {
-  const [posts, setPost] = useState([]);
   return (
-    <div className="App">
-      <MuiThemeProvider>
-        <PostContext.Provider value={{ posts, setPost }}>
-          <PostForm></PostForm>
-          <PostList></PostList>
-        </PostContext.Provider>
-      </MuiThemeProvider>
-    </div>
+    <Routes>
+      <Route path="/" element={<MainAppBar />}>
+        <Route path="posts" element={<Posts />} />
+        <Route path="statistics" element={<Statistics />} />
+      </Route>
+    </Routes>
   );
 }
 

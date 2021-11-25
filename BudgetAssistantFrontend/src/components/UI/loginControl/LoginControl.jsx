@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import IconButton from "@mui/material/IconButton";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import LoginIconBtn from "./LoginIconBtn";
+import LoginSwitchBtn from "./LoginSwitchBtn";
 
 const LoginControl = () => {
   const [auth, setAuth] = useState(true);
@@ -12,33 +9,17 @@ const LoginControl = () => {
   };
 
   return (
-    <div style={{display:"flex", justifyContent:"space-between", minHeight:"48px"}}>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? "Logout" : "Login"}
-        />
-      </FormGroup>
-      {auth && (
-        <div>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            // onClick={handleMenu}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-        </div>
-      )}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        minHeight: "50px",
+        margin: "0 15px ",
+      }}
+    >
+      <LoginSwitchBtn checked={auth} onChange={handleChange} />
+      {auth && <LoginIconBtn />}
     </div>
   );
 };

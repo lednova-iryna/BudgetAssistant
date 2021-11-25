@@ -29,8 +29,8 @@ const MainAppBar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <LoginControl/>
-      <AppBar position="static" >
+      <LoginControl />
+      <AppBar position="static" color="inherit">
         <Toolbar>
           <Tooltip title="Menu">
             <IconButton
@@ -49,23 +49,14 @@ const MainAppBar = () => {
           <Menu
             id="menu-mainappbar"
             anchorEl={anchorEl}
-            // anchorOrigin={{
-            //   vertical: 'top',
-            //   horizontal: 'right',
-            // }}
-            // keepMounted
-            // transformOrigin={{
-            //   vertical: 'top',
-            //   horizontal: 'right',
-            // }}
             open={open}
             onClose={handleClose}
           >
             <MenuItem onClick={handleMenu}>
-              <Link to="/posts">Posts</Link>
+              <Link style={{textDecoration: "none"}} to="/posts">Posts</Link>
             </MenuItem>
             <MenuItem onClick={handleMenu}>
-              <Link to="/statistics">Statistics</Link>
+              <Link style={{textDecoration: "none"}} to="/statistics">Statistics</Link>
             </MenuItem>
           </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -73,6 +64,7 @@ const MainAppBar = () => {
           </Typography>
           {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
+
         <div>
           <hr />
           <Outlet />

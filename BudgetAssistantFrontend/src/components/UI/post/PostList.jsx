@@ -38,8 +38,8 @@ const PostList = () => {
   // }
 
   return (
-    <TableContainer className={classes.tableContainer} component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
+    <TableContainer className={classes.tableContainer} component={Paper} >
+      <Table className={classes.table} aria-label="customized table" >
         <PostHeader />
         <TableBody>
           {posts.length ? (

@@ -13,7 +13,7 @@ node {
     try {
       checkout scm
     } catch (err) {
-      handleError(err, buildParameters)
+      handleError(err)
     }
   }
 
@@ -35,7 +35,7 @@ node {
       String imageFullName = "${buildParameters.get('imageRepository')}:${buildParameters.get('taskDefinition')}"
       buildParameters.put('imageFullName', imageFullName)
     } catch (err) {
-      handleError(err, buildParameters)
+      handleError(err)
     }
   }
 
@@ -46,7 +46,7 @@ node {
         dockerImage.push()
       }
     } catch (err) {
-      handleError(err, buildParameters)
+      handleError(err)
     }    
   }
 
@@ -58,7 +58,7 @@ node {
 
       sendNotification("<b>${env.JOB_NAME}</b>:%0AUp and running!")
     } catch (err) {
-      handleError(err, buildParameters)
+      handleError(err)
     }    
   }
 }

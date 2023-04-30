@@ -1,3 +1,6 @@
+# Ops
+Following instructions to setup GitHib actions and Terraform Cloud integrations
+https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
 # BudgetAssistantUI
 
 # Backend configuration

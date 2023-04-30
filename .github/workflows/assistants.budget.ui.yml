@@ -1,0 +1,29 @@
+name: Assistants. Budget - UI
+
+on:
+  push:
+    branches: ["develop", "main"]
+    paths:
+      - "assistants-budget-ui/**"
+      - "!**/README.md"
+      - "!**/gitignore"
+      - "!**/.husky/**"
+      - "!**/.vscode/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Environment
+        options:
+          - "develop"
+          - "production"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15

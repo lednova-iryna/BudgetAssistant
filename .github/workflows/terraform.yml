@@ -2,7 +2,7 @@ name: Assistants. Budget - Ops
 
 on:
   push:
-    branches: ["develop", "main"]
+    branches: ["develop"]
     paths:
       - "assistants-budget-ops/**"
       - "!**/README.md"
@@ -18,6 +18,8 @@ on:
         options:
           - "develop"
           - "production"
+env:
+  PRJ_PATH: ${{  }}
 
 jobs:
   terraform:
@@ -26,6 +28,17 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - name: Set env PROJECT_PATH
+        run: |
+          if [[ $BRANCH == '' ]]; then
+              echo "ENVIRONMENT=develop" >> "$GITHUB_ENV"
+          else
+              echo "ENVIRONMENT=$github.event.inputs.environment" >> "$GITHUB_ENV"
+          fi
+      - name: Set env PROJECT_PATH
+        run: |
+          echo "PROJECT_PATH=./assistants-budget-ops/$env.ENVIRONMENT" >> "$GITHUB_ENV"
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -43,19 +56,19 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: ./assistants-budget-ops/${{ github.event.inputs.environment }}
+        working-directory: ${{env.PROJECT_PATH}}
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        working-directory: ./assistants-budget-ops/${{ github.event.inputs.environment }}
+        working-directory: ${{env.PROJECT_PATH}}
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color -input=false
         continue-on-error: true
-        working-directory: ./assistants-budget-ops/${{ github.event.inputs.environment }}
+        working-directory: ${{env.PROJECT_PATH}}
 
       - name: Update Pull Request
         uses: actions/github-script@v6
@@ -89,4 +102,4 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
-        working-directory: ./assistants-budget-ops/${{ github.event.inputs.environment }}
+        working-directory: ${{env.PROJECT_PATH}}

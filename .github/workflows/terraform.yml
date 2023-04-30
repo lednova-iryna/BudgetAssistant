@@ -35,7 +35,7 @@ jobs:
 
       - name: Set env PROJECT_PATH
         run: |
-          echo "PROJECT_PATH=assistants-budget-ops/${{ env.ENVIRONMENT }}" >> "$GITHUB_ENV"
+          echo "PROJECT_PATH=assistants-budget-ops" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v3

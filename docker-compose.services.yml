@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   jenkins:
-    image: budget-assistant.jenkins
+    image: assistants-budget.jenkins
     build:
       context: .
       dockerfile: ./jenkins/Dockerfile
@@ -11,16 +11,16 @@ services:
     ports:
       - 8080:8080
       - 50000:50000
-    container_name: budget-assistant.jenkins
+    container_name: assistants-budget.jenkins
     volumes:
       - ./jenkins/jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - budget-assistant
+      - assistants-budget
 
   sonarqube:
     image: sonarqube:lts
-    container_name: budget-assistant.sonarqube
+    container_name: assistants-budget.sonarqube
     ports:
       - 9000:9000
     volumes:
@@ -36,8 +36,8 @@ services:
       # - SONAR_JDBC_PASSWORD=${POSTGRES_PASS}
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
     networks:
-      - budget-assistant
+      - assistants-budget
 
 networks:
-  budget-assistant:
+  assistants-budget:
     external: true

@@ -1,7 +1,7 @@
 
 node {
   Map<String, String> buildParameters = new HashMap<String, String>()
-  buildParameters.put('imageRepository', 'lednev/budget-assistant.ui')
+  buildParameters.put('imageRepository', 'lednev/assistants-budget-ui')
 
   def dockerImage
 

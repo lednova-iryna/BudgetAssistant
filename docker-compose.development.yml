@@ -1,26 +1,26 @@
 version: "3.8"
 
 services:
-  budget-assistant-api.dev:
-    image: lednev/budget-assistant.api:development
-    container_name: budget-assistant.api.dev
+  assistants-budget-api-dev:
+    image: lednev/assistants-budget-api:development
+    container_name: assistants-budget-api-dev
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80"
     networks:
-      - budget-assistant
+      - assistants-budget
 
-  budget-assistant-ui.dev:
-    image: lednev/budget-assistant.ui:development
-    container_name: budget-assistant.ui.dev
-    build: ./BudgetAssistantFrontend
+  assistants-budget-ui-dev:
+    image: lednev/assistants-budget-ui:development
+    container_name: assistants-budget-ui-dev
+    build: ./assistants-budget-ui
     ports:
       - "80"
     networks:
-      - budget-assistant
+      - assistants-budget
 
 networks:
-  budget-assistant:
+  assistants-budget:
     external: true

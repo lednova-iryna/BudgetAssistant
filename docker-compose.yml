@@ -3,7 +3,7 @@ version: "3.8"
 services:
   nginx:
     image: nginx:1.21.3-alpine
-    container_name: budget-assistant.nginx
+    container_name: assistants-budget.nginx
     ports:
       - "80:80"
       - "443:443"
@@ -13,8 +13,8 @@ services:
       - ./nginx/ssl:/etc/ssl/private:ro
       - ./nginx/ssl/.well-known:/etc/nginx/.well-known:ro
     networks:
-      - budget-assistant
+      - assistants-budget
 
 networks:
-  budget-assistant:
+  assistants-budget:
     external: true

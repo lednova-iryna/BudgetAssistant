@@ -27,7 +27,7 @@ if [ -n "$AWS_S3_ENDPOINT" ]; then
   ENDPOINT_APPEND="--endpoint-url $AWS_S3_ENDPOINT"
 fi
 
-if [ -z "$WORKING_DIRECTORY" ]; then
+if [ -n "$WORKING_DIRECTORY" ]; then
   sh -c "cd ${WORKING_DIRECTORY}" 
 fi
 

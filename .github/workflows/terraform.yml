@@ -28,7 +28,8 @@ jobs:
       pull-requests: write
     steps:
       - name: Set env ENVIRONMENT
-        run: echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+        run: |
+          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v3

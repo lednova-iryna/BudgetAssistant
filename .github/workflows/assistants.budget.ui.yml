@@ -24,6 +24,7 @@ permissions:
 
 jobs:
   build:
+    name: "Build and Deploy UI to S3"
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15

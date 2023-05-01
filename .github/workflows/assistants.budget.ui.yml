@@ -23,15 +23,14 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: "Build and Deploy UI to S3"
+  prepare:
+    name: "Prepare project for build"
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
       run:
         working-directory: .
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -52,11 +51,21 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+      - name: Install Dependencies
+        run: yarn install
+        working-directory: ./assistants-budget-ui
 
-      # - name: Install Dependencies
-      #   run: yarn install
-      #   working-directory: ./assistants-budget-ui
+  build:
+    name: "Build and Deploy UI to S3"
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: prepare
+    defaults:
+      run:
+        working-directory: .
 
+    steps:
       - name: Deploy to S3
         uses: ./actions/react-deploy-to-s3
         with:

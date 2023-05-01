@@ -36,10 +36,10 @@ jobs:
           # terraform_version: 1.4.2
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # - name: Terraform Format
-      #   id: fmt
-      #   run: terraform -chdir=${{ env.ENVIRONMENT }} fmt -check
-      #   working-directory: assistants-budget-ops
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        working-directory: assistants-budget-ops
 
       - name: Terraform Init
         id: init
@@ -53,7 +53,6 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request'
         run: terraform plan -chdir=${{ env.ENVIRONMENT }} -no-color -input=false
         continue-on-error: true
         working-directory: assistants-budget-ops

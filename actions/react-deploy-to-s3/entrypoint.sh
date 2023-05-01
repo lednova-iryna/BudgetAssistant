@@ -1,4 +1,5 @@
 #!/bin/sh
+echo "Starting 'react-deploy-to-s3'"
 
 set -e
 
@@ -28,36 +29,41 @@ if [ -n "$AWS_S3_ENDPOINT" ]; then
 fi
 
 if [ -n "$WORKING_DIRECTORY" ]; then
-  sh -c "cd ${WORKING_DIRECTORY}" 
+  sh -c "cd ${WORKING_DIRECTORY}"
 fi
 
 # Override default NODE_ENV (production) if set by user.
 NODE_ENV_PREPEND="NODE_ENV=${NODE_ENV:-production}"
 
+echo "Configure AWS Profile"
 # Create a dedicated profile for this action to avoid conflicts
 # with past/future actions.
-aws configure --profile react-deploy-to-s3-action <<-EOF > /dev/null 2>&1
+aws configure --profile react-deploy-to-s3 <<-EOF >/dev/null 2>&1
 ${AWS_ACCESS_KEY_ID}
 ${AWS_SECRET_ACCESS_KEY}
 ${AWS_REGION}
 text
 EOF
 
+echo "Start project build."
+echo "Working directory is: $(pwd)"
+echo "Working directory consists of: $(ls)"
 # - Install dependencies
 # - Build react bundle
 # - Sync using our dedicated profile and suppress verbose messages.
 #   All other flags are optional via the `args:` directive.
 # sh -c "yarn" \
-# && 
-sh -c "${NODE_ENV_PREPEND} yarn build" \
-&& sh -c "aws s3 sync ${SOURCE_DIR:-public} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
-              --profile react-deploy-to-s3-action \
+# &&
+sh -c "${NODE_ENV_PREPEND} yarn build" &&
+  sh -c "aws s3 sync ${SOURCE_DIR:-public} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
+              --profile react-deploy-to-s3 \
               --no-progress \
               ${ENDPOINT_APPEND} $*"
 SUCCESS=$?
 
-if [ $SUCCESS -eq 0 ]
-then
+echo "Project build finished. Status: ${SUCCESS}"
+
+if [ $SUCCESS -eq 0 ]; then
   # Invalidate cloudfront distribution if user sets CLOUDFRONT_DISTRIBUTION_ID
   if [ -n "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
     sh -c "aws cloudfront create-invalidation \
@@ -70,15 +76,14 @@ fi
 # We need to re-run `aws configure` with bogus input instead of
 # deleting ~/.aws in case there are other credentials living there.
 # https://forums.aws.amazon.com/thread.jspa?threadID=148833
-aws configure --profile s3-sync-action <<-EOF > /dev/null 2>&1
+aws configure --profile s3-sync-action <<-EOF >/dev/null 2>&1
 null
 null
 null
 text
 EOF
 
-if [ $SUCCESS -eq 0 ]
-then
+if [ $SUCCESS -eq 0 ]; then
   echo "Deploy successful."
 else
   echo "Failed to perform deploy!"

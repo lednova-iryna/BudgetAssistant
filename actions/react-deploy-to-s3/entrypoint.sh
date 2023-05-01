@@ -28,12 +28,15 @@ if [ -n "$AWS_S3_ENDPOINT" ]; then
   ENDPOINT_APPEND="--endpoint-url $AWS_S3_ENDPOINT"
 fi
 
-if [ -n "$WORKING_DIRECTORY" ]; then
-  sh -c "cd ${WORKING_DIRECTORY}"
+if [ -z "$WORKING_DIRECTORY" ]; then
+  WORKING_DIRECTORY="."
 fi
 
 # Override default NODE_ENV (production) if set by user.
 NODE_ENV_PREPEND="NODE_ENV=${NODE_ENV:-production}"
+
+echo "WORKING_DIRECTORY is: ${WORKING_DIRECTORY}"
+cd $WORKING_DIRECTORY
 
 echo "Configure AWS Profile"
 # Create a dedicated profile for this action to avoid conflicts

@@ -27,6 +27,9 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: .
 
     steps:
       - name: Checkout Repo

@@ -60,7 +60,7 @@ sh -c "${NODE_ENV_PREPEND} CI=false && yarn build" &&
   sh -c "aws s3 sync ${SOURCE_DIR:-public} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --profile react-deploy-to-s3 \
               --no-progress \
-              ${ENDPOINT_APPEND} $*"
+              ${ENDPOINT_APPEND}"
 SUCCESS=$?
 
 echo "Project build finished. Status: ${SUCCESS}"

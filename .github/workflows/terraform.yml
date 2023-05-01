@@ -9,7 +9,6 @@ on:
       - "!**/gitignore"
       - "!**/.husky/**"
       - "!**/.vscode/**"
-  pull_request:
   workflow_dispatch:
     inputs:
       environment:
@@ -22,20 +21,14 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: assistants-budget-ops
     permissions:
       pull-requests: write
     steps:
       - name: Set env ENVIRONMENT
-        run: |
-          if [[ $BRANCH == '' ]]; then
-              echo "ENVIRONMENT=develop" >> "$GITHUB_ENV"
-          else
-              echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
-          fi
-
-      - name: Set env PROJECT_PATH
-        run: |
-          echo "PROJECT_PATH=assistants-budget-ops" >> "$GITHUB_ENV"
+        run: echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,50 +42,21 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform -chdir=${{ env.ENVIRONMENT }} fmt -check
-        working-directory: ./assistants-budget-ops
 
       - name: Terraform Init
         id: init
         run: terraform -chdir=${{ env.ENVIRONMENT }} init
-        working-directory: ${{env.PROJECT_PATH}}
 
       - name: Terraform Validate
         id: validate
         run: terraform -chdir=${{ env.ENVIRONMENT }} validate -no-color
-        working-directory: ${{env.PROJECT_PATH}}
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -chdir=${{ env.ENVIRONMENT }} -no-color -input=false
         continue-on-error: true
-        working-directory: ${{env.PROJECT_PATH}}
 
-      - name: Update Pull Request
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: ${{ steps.plan.outputs.stdout }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            #### Environemt \`${{ github.event.inputs.environment }}\`
-            <details><summary>Show Plan</summary>
-            \`\`\`terraform\n
-            ${process.env.PLAN}
-            \`\`\`
-            </details>
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
@@ -100,4 +64,3 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform -chdir=${{ env.ENVIRONMENT }} apply -auto-approve -input=false
-        working-directory: ${{env.PROJECT_PATH}}

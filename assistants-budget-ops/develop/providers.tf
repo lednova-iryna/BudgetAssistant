@@ -3,7 +3,7 @@ terraform {
     organization = "lednov"
 
     workspaces {
-      name = local.common_tags.product
+      name =  "assistants-budget"
     }
   }
   required_providers {

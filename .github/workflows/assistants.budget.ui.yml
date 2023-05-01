@@ -23,7 +23,70 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  prepare:
+    name: "Prepare project for build"
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ./assistants-budget-ui/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install Dependencies
+        run: yarn install
+        working-directory: ./assistants-budget-ui
+
+  build:
+    name: "Build and Deploy UI to S3"
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: prepare
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ./assistants-budget-ui/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Build project
+        run: NODE_ENV=production CI=false && yarn build
+        working-directory: ./assistants-budget-ui
+
+      - name: Deploy to S3"
+        run: aws s3 sync ./build/ s3://${{ secrets.AWS_S3_BUCKET }}
+          --no-progress
+          --delete
+        working-directory: ./assistants-budget-ui

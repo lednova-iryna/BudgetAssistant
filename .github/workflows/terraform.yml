@@ -21,11 +21,7 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: assistants-budget-ops
-    permissions:
-      pull-requests: write
+
     steps:
       - name: Set env ENVIRONMENT
         run: |
@@ -43,20 +39,24 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform -chdir=${{ env.ENVIRONMENT }} fmt -check
+        working-directory: assistants-budget-ops
 
       - name: Terraform Init
         id: init
         run: terraform -chdir=${{ env.ENVIRONMENT }} init
+        working-directory: assistants-budget-ops
 
       - name: Terraform Validate
         id: validate
         run: terraform -chdir=${{ env.ENVIRONMENT }} validate -no-color
+        working-directory: assistants-budget-ops
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -chdir=${{ env.ENVIRONMENT }} -no-color -input=false
         continue-on-error: true
+        working-directory: assistants-budget-ops
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
@@ -65,3 +65,4 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform -chdir=${{ env.ENVIRONMENT }} apply -auto-approve -input=false
+        working-directory: assistants-budget-ops

@@ -48,6 +48,7 @@ jobs:
         working-directory: ./assistants-budget-ui
 
       - name: Deploy to S3
+        working-directory: ./assistants-budget-ui
         uses: jeanlescure/react-deploy-to-s3-action@main
         with:
           args: --acl public-read --follow-symlinks --delete

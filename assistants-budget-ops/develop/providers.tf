@@ -3,7 +3,7 @@ terraform {
     organization = "lednov"
 
     workspaces {
-      name =  "assistants-budget"
+      name = "assistants-budget"
     }
   }
   required_providers {

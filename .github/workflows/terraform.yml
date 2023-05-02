@@ -1,14 +1,14 @@
 name: Assistants. Budget - Ops
 
 on:
-  push:
-    branches: ["develop"]
-    paths:
-      - "assistants-budget-ops/**"
-      - "!**/README.md"
-      - "!**/gitignore"
-      - "!**/.husky/**"
-      - "!**/.vscode/**"
+  # push:
+  #   branches: ["develop"]
+  #   paths:
+  #     - "assistants-budget-ops/**"
+  #     - "!**/README.md"
+  #     - "!**/gitignore"
+  #     - "!**/.husky/**"
+  #     - "!**/.vscode/**"
   workflow_dispatch:
     inputs:
       environment:
@@ -53,9 +53,14 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=${{ env.ENVIRONMENT }} plan -no-color -input=false
+        run: |
+          export AWS_ACM_CERTIFICATE_ARN=$AWS_ACM_CERTIFICATE_ARN
+
+          terraform -chdir=${{ env.ENVIRONMENT }} plan -no-color -input=false
         continue-on-error: true
         working-directory: assistants-budget-ops
+        env:
+          AWS_ACM_CERTIFICATE_ARN: ${{ secrets.AWS_ACM_CERTIFICATE_ARN }}
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'

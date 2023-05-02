@@ -86,7 +86,7 @@ jobs:
         working-directory: ./assistants-budget-ui
 
       - name: Deploy to S3"
-        run: aws s3 sync ./build/ s3://${{ secrets.AWS_S3_BUCKET }}
+        run: aws s3 sync ./build/ s3://${{ secrets.AWS_S3_BUDGET_UI_BUCKET }}
           --no-progress
           --delete
         working-directory: ./assistants-budget-ui

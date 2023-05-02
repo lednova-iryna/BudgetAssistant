@@ -57,6 +57,7 @@ jobs:
           terraform -chdir=${{ env.ENVIRONMENT }} plan -no-color -input=false \
             -var "acm_certificate_arn=${{ secrets.AWS_ACM_CERTIFICATE_ARN }}" \
             -var "assistants_budget_ui_s3_bucket_name=${{ secrets.AWS_S3_BUDGET_UI_BUCKET }}"
+            -var "assistants_budget_ui_cloudfront_domain_name=${{ secrets.AWS_CLOUDFRONT_BUDGET_UI_DOMAIN }}"
         continue-on-error: true
         working-directory: assistants-budget-ops
 
@@ -69,4 +70,5 @@ jobs:
           terraform -chdir=${{ env.ENVIRONMENT }} apply -auto-approve -input=false \
             -var "acm_certificate_arn=${{ secrets.AWS_ACM_CERTIFICATE_ARN }}" \
             -var "assistants_budget_ui_s3_bucket_name=${{ secrets.AWS_S3_BUDGET_UI_BUCKET }}"
+            -var "assistants_budget_ui_cloudfront_domain_name=${{ secrets.AWS_CLOUDFRONT_BUDGET_UI_DOMAIN }}"
         working-directory: assistants-budget-ops

@@ -55,9 +55,8 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          export AWS_ACM_CERTIFICATE_ARN=${{ env.AWS_ACM_CERTIFICATE_ARN }}
-
-          terraform -chdir=${{ env.ENVIRONMENT }} plan -no-color -input=false
+          terraform -chdir=${{ env.ENVIRONMENT }} plan -no-color -input=false \
+            -var "AWS_ACM_CERTIFICATE_ARN=${{ env.AWS_ACM_CERTIFICATE_ARN }}"
         continue-on-error: true
         working-directory: assistants-budget-ops
 

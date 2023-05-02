@@ -65,5 +65,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform -chdir=${{ env.ENVIRONMENT }} apply -auto-approve -input=false
+        run: |
+          terraform -chdir=${{ env.ENVIRONMENT }} apply -auto-approve -input=false \
+            -var "acm_certificate_arn=${{ env.AWS_ACM_CERTIFICATE_ARN }}"
         working-directory: assistants-budget-ops

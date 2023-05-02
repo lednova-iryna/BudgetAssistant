@@ -85,3 +85,29 @@ resource "aws_cloudfront_distribution" "this" {
     }
   )
 }
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["${aws_cloudfront_origin_access_identity.this.iam_arn}"]
+    }
+  }
+
+  statement {
+    actions   = ["s3:ListBucket"]
+    resources = ["${aws_s3_bucket.this.arn}"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["${aws_cloudfront_origin_access_identity.this.iam_arn}"]
+    }
+  }
+}
+resource "aws_s3_bucket_policy" "s3_bucket_policy" {
+  bucket = aws_s3_bucket.this.id
+  policy = data.aws_iam_policy_document.this.json
+}

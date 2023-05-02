@@ -113,13 +113,13 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
 }
 
 resource "aws_route53_record" "root_domain" {
-  zone_id = aws_route53_zone.this.zone_id
+  zone_id = var.aws_route53_hostedzone_id
   name    = var.cloudfront_domain_name
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.this.domain_name
-    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    name                   = var.cloudfront_domain_name
+    zone_id                = var.aws_route53_hostedzone_id
     evaluate_target_health = false
   }
 }

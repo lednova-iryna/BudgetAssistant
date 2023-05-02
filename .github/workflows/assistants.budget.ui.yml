@@ -86,7 +86,10 @@ jobs:
         working-directory: ./assistants-budget-ui
 
       - name: Deploy to S3"
-        run: aws s3 sync ./build/ s3://${{ secrets.AWS_S3_BUCKET }}
+        run: aws s3 sync ./build/ s3://${{ secrets.AWS_S3_BUDGET_UI_BUCKET }}
           --no-progress
           --delete
         working-directory: ./assistants-budget-ui
+
+      - name: Invalidate CloudFront cache
+        run: AWS_MAX_ATTEMPTS=5 aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT__BUDGET_UI_DISTRIBUTION_ID }} --paths "/*"

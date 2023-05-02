@@ -1,6 +1,18 @@
 # Ops
 Following instructions to setup GitHib actions and Terraform Cloud integrations
 https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
+
+## Secrets
+
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_S3_BUDGET_UI_BUCKET
+CLOUDFRONT_DISTRIBUTION_ID
+AWS_ACM_CERTIFICATE_ARN
+
+
+request ACM Certificate https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/request manually no terraform
+
 # BudgetAssistantUI
 
 # Backend configuration

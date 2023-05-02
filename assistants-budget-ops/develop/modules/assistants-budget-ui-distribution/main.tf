@@ -118,7 +118,7 @@ resource "aws_route53_record" "root_domain" {
   type    = "A"
 
   alias {
-    name                   = var.cloudfront_domain_name
+    name                   = aws_cloudfront_distribution.this.domain_name
     zone_id                = var.aws_route53_hostedzone_id
     evaluate_target_health = false
   }

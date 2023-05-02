@@ -11,7 +11,7 @@ CLOUDFRONT_DISTRIBUTION_ID
 AWS_ACM_CERTIFICATE_ARN
 
 
-request ACM Certificate https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/request
+request ACM Certificate https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/request manually no terraform
 
 # BudgetAssistantUI
 

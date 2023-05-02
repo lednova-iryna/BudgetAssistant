@@ -23,7 +23,7 @@ resource "aws_cloudfront_origin_access_identity" "this" {
 resource "aws_cloudfront_distribution" "this" {
 
   enabled             = true
-  is_ipv6_enabled     = true
+  is_ipv6_enabled     = false
   default_root_object = "index.html"
   http_version        = "http2"
 
@@ -110,10 +110,6 @@ data "aws_iam_policy_document" "this" {
 resource "aws_s3_bucket_policy" "s3_bucket_policy" {
   bucket = aws_s3_bucket.this.id
   policy = data.aws_iam_policy_document.this.json
-}
-
-resource "aws_route53_zone" "this" {
-  name = var.cloudfront_domain_name
 }
 
 resource "aws_route53_record" "root_domain" {

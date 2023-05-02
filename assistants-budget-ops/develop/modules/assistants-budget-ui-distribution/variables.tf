@@ -14,3 +14,7 @@ variable "cloudfront_acm_certificate_arn" {
 variable "cloudfront_domain_name" {
   description = "Domain Name of UI web app"
 }
+
+variable "aws_route53_hostedzone_id" {
+  description = "AWS Route53 Hosted Zone ID for CloudFront distribution alias"
+}

@@ -3,7 +3,9 @@ variable "common_tags" {
   default     = {}
 }
 
-variable "bucket_name" {}
+variable "bucket_name" {
+  description = "S3 bucket where UI assets are stored"
+}
 
 variable "cloudfront_acm_certificate_arn" {
   description = "ACM for ssl certificate in aws"

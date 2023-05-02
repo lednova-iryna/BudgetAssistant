@@ -26,6 +26,7 @@ jobs:
       - name: Set env ENVIRONMENT
         run: |
           echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+          echo "AWS_ACM_CERTIFICATE_ARN= ${{ secrets.AWS_ACM_CERTIFICATE_ARN }}" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,13 +55,11 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          export AWS_ACM_CERTIFICATE_ARN=$AWS_ACM_CERTIFICATE_ARN
+          export AWS_ACM_CERTIFICATE_ARN=${{ env.AWS_ACM_CERTIFICATE_ARN }}
 
           terraform -chdir=${{ env.ENVIRONMENT }} plan -no-color -input=false
         continue-on-error: true
         working-directory: assistants-budget-ops
-        env:
-          AWS_ACM_CERTIFICATE_ARN: ${{ secrets.AWS_ACM_CERTIFICATE_ARN }}
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'

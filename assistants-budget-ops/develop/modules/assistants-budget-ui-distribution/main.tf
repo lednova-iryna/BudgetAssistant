@@ -28,7 +28,7 @@ resource "aws_cloudfront_distribution" "this" {
   http_version        = "http2"
 
   origin {
-    domain_name = var.cloudfront_domain_name
+    domain_name = aws_s3_bucket.this.bucket_regional_domain_name #var.cloudfront_domain_name
     origin_id   = aws_s3_bucket.this.id
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path

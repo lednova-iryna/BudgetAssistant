@@ -3,7 +3,7 @@ variable "common_tags" {
   default     = {}
 }
 variable "aws_lambda_architecture" {
-  description = "Instruction set architecture for your Lambda function. ['x86_64'] or ['arm64']"
+  description = "Instruction set architecture for your Lambda function. 'x86_64' or 'arm64'"
 }
 variable "aws_lambda_name" {
   description = "Name of the lambda function"

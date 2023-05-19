@@ -11,7 +11,7 @@ module "assistants_budget_be_api_lambda" {
   source      = "./modules/assistants-budget-be-api-lambda"
   common_tags = local.common_tags
 
-  aws_lambda_architecture     = ["arm64"]
+  aws_lambda_architecture     = "arm64"
   aws_lambda_docker_image_url = ""
   aws_lambda_memory_size      = 256
   aws_lambda_parameter_name   = "/develop/assistants-budget-be-api-lambda"

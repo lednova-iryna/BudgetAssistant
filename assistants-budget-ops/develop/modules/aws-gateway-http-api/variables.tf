@@ -35,3 +35,7 @@ variable "assistants_budget_be_api_lambda_invoke_arn" {
 variable "assistants_budget_be_api_lambda_function_name" {
 
 }
+
+variable "api_gateway_http_api_post_stage_name" {
+  description = "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-stages.html"
+}

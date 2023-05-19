@@ -25,6 +25,7 @@ module "assistants_budget_be_api_gateway" {
   api_gateway_http_api_name                     = "Assistants: Budget. Develop"
   assistants_budget_be_api_lambda_function_name = module.assistants_budget_be_api_lambda.lambda_name
   assistants_budget_be_api_lambda_invoke_arn    = module.assistants_budget_be_api_lambda.lambda_arn
+  api_gateway_http_api_post_stage_name          = "develop"
   api_gateway_cors_options = {
     allow_headers  = "*"
     allow_origin   = "*"

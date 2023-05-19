@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "hediet.vscode-drawio",
+        "github.vscode-github-actions",
+        "eamodio.gitlens",
+        "hashicorp.terraform",
+        "yzhang.markdown-all-in-one"
+    ]
+}

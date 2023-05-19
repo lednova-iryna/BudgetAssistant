@@ -1,0 +1,140 @@
+name: Assistants. Budget - UI
+
+on:
+  push:
+    branches: ["develop", "main"]
+    paths:
+      - "assistants-budget-be/**"
+      - "!**/README.md"
+      - "!**/gitignore"
+      - "!**/.husky/**"
+      - "!**/.vscode/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Environment
+        options:
+          - "develop"
+          - "production"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push:
+    name: "Build Docker image and push to Docker Hub"
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Set GIT Commit SHA 
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: 'arm64,amd64'
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+          docker context create builders
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/amd64,linux/arm64
+          endpoint: builders
+
+      - name: Build, tag, and push image to Docker Hub
+        uses: docker/build-push-action@v3
+        env:
+          ECR_REGISTRY: lednev
+          ECR_REPOSITORY: assistants-budget-be
+          CURRENT_BRANCH: ${{ github.ref_name }}
+          IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
+        with:
+          platforms: linux/arm64
+          context: ./assistants-budget-be
+          file: ./assistants-budget-be/Assistants.Budget.BE.API/Dockerfile
+          push: true
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.CURRENT_BRANCH }}-${{ env.IMAGE_TAG }}   
+
+  deploy-env:
+    name: "Update AWS env with new version of project"
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build-and-push
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Set env ENVIRONMENT
+        run: |
+          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+          echo "TF_CHDIR=${{ github.event.inputs.environment }}/assistants-budget-be-api-lambda" >> "$GITHUB_ENV"
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          # terraform_version: 1.4.2
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        working-directory: assistants-budget-ops
+
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=${{ env.TF_CHDIR }} init
+        working-directory: assistants-budget-ops
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=${{ env.TF_CHDIR }} validate -no-color
+        working-directory: assistants-budget-ops
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform -chdir=${{ env.TF_CHDIR }} plan -no-color -input=false \
+            -var "acm_certificate_arn=${{ secrets.AWS_ACM_CERTIFICATE_ARN }}" \
+            -var "assistants_budget_ui_s3_bucket_name=${{ secrets.AWS_S3_BUDGET_UI_BUCKET }}" \
+            -var "assistants_budget_ui_cloudfront_domain_name=${{ secrets.AWS_CLOUDFRONT_BUDGET_UI_DOMAIN }}" \
+            -var "assistants_budget_ui_route53_hostedzone_id=${{ secrets.AWS_ROUTE53_HOSTED_ZONE_ID }}"
+        continue-on-error: true
+        working-directory: assistants-budget-ops
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: |
+          terraform -chdir=${{ env.TF_CHDIR }} apply -auto-approve -input=false \
+            -var "acm_certificate_arn=${{ secrets.AWS_ACM_CERTIFICATE_ARN }}" \
+            -var "assistants_budget_ui_s3_bucket_name=${{ secrets.AWS_S3_BUDGET_UI_BUCKET }}" \
+            -var "assistants_budget_ui_cloudfront_domain_name=${{ secrets.AWS_CLOUDFRONT_BUDGET_UI_DOMAIN }}" \
+            -var "assistants_budget_ui_route53_hostedzone_id=${{ secrets.AWS_ROUTE53_HOSTED_ZONE_ID }}"
+        working-directory: assistants-budget-ops

@@ -1,3 +1,7 @@
+# Architecture
+
+![](./docs/architecture-general.drawio.svg)
+
 # Ops
 
 ## Initial manual setup

@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   build-and-push:
-    name: "Build Docker image and push to Docker Hub"
+    name: "Build Docker image and push to ECR"
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15

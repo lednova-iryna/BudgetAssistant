@@ -15,6 +15,7 @@ RUN dotnet restore "Assistants.Budget.BE.API/Assistants.Budget.BE.API.csproj"
 
 WORKDIR "/src/Assistants.Budget.BE.API"
 
+RUN ls -a
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     RID=linux-x64 ; \

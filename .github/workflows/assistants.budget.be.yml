@@ -68,8 +68,8 @@ jobs:
       - name: Build, tag, and push image to Docker Hub
         uses: docker/build-push-action@v3
         env:
-          ECR_REGISTRY: lednev
-          ECR_REPOSITORY: assistants-budget-be
+          ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY_BE_API }}
           CURRENT_BRANCH: ${{ github.ref_name }}
           IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
         with:

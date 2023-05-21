@@ -34,6 +34,8 @@ As an initial setup for a fresh environment, before executing Terraform scripts 
    1. Make sure to select appropriate Environment before execution of GitHub Action;
 
 
+Create ECR (using terraform, comment everything else), builde and deploy BE with actions to ECR, run all other terraforms.
+
 # BudgetAssistantUI
 
 # Backend configuration

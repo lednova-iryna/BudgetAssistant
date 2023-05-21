@@ -13,8 +13,8 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
-  name               = "iam_for_lambda"
+resource "aws_iam_role" "lambda_iam_role" {
+  name               = "lambda_iam_role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -30,7 +30,7 @@ resource "aws_lambda_function" "this" {
   timeout       = var.aws_lambda_timeout
   memory_size   = var.aws_lambda_memory_size
 
-  role = aws_iam_role.iam_for_lambda.arn
+  role = aws_iam_role.lambda_iam_role.arn
 
   environment {
     variables = {

@@ -1,3 +1,7 @@
+module "ecr" {
+  source = "./modules/ecr"
+}
+
 module "assistants-budget-ui-distribution" {
   source                         = "./modules/assistants-budget-ui-distribution"
   common_tags                    = local.common_tags
@@ -12,7 +16,7 @@ module "assistants-budget-be-api-lambda" {
   common_tags = local.common_tags
 
   aws_lambda_architecture     = "arm64"
-  aws_lambda_docker_image_url = "place_holder"
+  aws_lambda_docker_image_url = var.assistants_budget_be_api_docker_image_url
   aws_lambda_memory_size      = 256
   aws_lambda_parameter_name   = "/develop/assistants-budget-be-api-lambda"
   aws_lambda_timeout          = 60
@@ -25,7 +29,7 @@ module "assistants-budget-be-api-gateway" {
   api_gateway_http_api_name                     = "Assistants: Budget. Develop"
   assistants_budget_be_api_lambda_function_name = module.assistants-budget-be-api-lambda.lambda_name
   assistants_budget_be_api_lambda_invoke_arn    = module.assistants-budget-be-api-lambda.lambda_arn
-  api_gateway_http_api_post_stage_name          = "develop"
+  api_gateway_http_api_stage_name               = "develop"
   api_gateway_cors_options = {
     allow_headers  = "*"
     allow_origin   = "*"

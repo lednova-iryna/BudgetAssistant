@@ -21,7 +21,7 @@ resource "aws_apigatewayv2_api" "http_api" {
 
 resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.http_api.id
-  name        = var.api_gateway_http_api_post_stage_name
+  name        = var.api_gateway_http_api_stage_name
   auto_deploy = true
   # access_log_settings {
   #   destination_arn = var.logging_group_arn

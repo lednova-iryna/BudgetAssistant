@@ -66,7 +66,7 @@ jobs:
           endpoint: builders
 
       - name: Build, tag, and push image to Docker Hub
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY_BE_API }}

@@ -1,33 +1,37 @@
-﻿using Assistants.Budget.BE.Mediator;
+﻿using Assistants.Budget.BE.API.Configurators;
+using Assistants.Budget.BE.Mediator;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddMediator();
-
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwagger(true);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseSwagger(true);
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapGet(
+    "/",
+    async context =>
+    {
+        if (true)
+        {
+            context.Response.Redirect("/swagger/index.html");
+        }
+        else
+        {
+            await context.Response.WriteAsync(string.Empty);
+        }
+    }
+);
 
 app.Run();
-

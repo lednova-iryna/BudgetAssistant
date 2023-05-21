@@ -7,7 +7,7 @@ using Assistants.Budget.BE.Mediator.Transactions;
 namespace Assistants.Budget.BE.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("home")]
 public class HomeController : ControllerBase
 {
     private readonly ILogger<HomeController> logger;
@@ -25,4 +25,3 @@ public class HomeController : ControllerBase
         return await mediator.Send(new TransactionsQuery());
     }
 }
-

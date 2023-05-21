@@ -14,9 +14,8 @@ resource "aws_apigatewayv2_route" "assistants_budget_be_api" {
 }
 
 resource "aws_apigatewayv2_integration" "this" {
-  api_id           = aws_apigatewayv2_api.http_api.id
-  integration_type = "AWS_PROXY"
-
+  api_id                 = aws_apigatewayv2_api.http_api.id
+  integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
   description            = "BE API"
   integration_method     = "ANY"

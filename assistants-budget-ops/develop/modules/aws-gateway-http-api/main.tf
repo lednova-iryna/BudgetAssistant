@@ -24,10 +24,25 @@ resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.http_api.id
   name        = var.api_gateway_http_api_stage_name
   auto_deploy = true
+
   # access_log_settings {
-  #   destination_arn = var.logging_group_arn
-  #   format          = "{ \"requestId\":\"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\",\"routeKey\":\"$context.routeKey\", \"status\":\"$context.status\",\"protocol\":\"$context.protocol\", \"responseLength\":\"$context.responseLength\", \"error\":\"$context.integrationErrorMessage\" }"
+  #   destination_arn = aws_cloudwatch_log_group.api_gw.arn
+
+  #   format = jsonencode({
+  #     requestId               = "$context.requestId"
+  #     sourceIp                = "$context.identity.sourceIp"
+  #     requestTime             = "$context.requestTime"
+  #     protocol                = "$context.protocol"
+  #     httpMethod              = "$context.httpMethod"
+  #     resourcePath            = "$context.resourcePath"
+  #     routeKey                = "$context.routeKey"
+  #     status                  = "$context.status"
+  #     responseLength          = "$context.responseLength"
+  #     integrationErrorMessage = "$context.integrationErrorMessage"
+  #     }
+  #   )
   # }
+
   default_route_settings {
     logging_level            = var.default_route_settings.logging_level
     data_trace_enabled       = var.default_route_settings.data_trace_enabled

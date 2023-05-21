@@ -32,6 +32,10 @@ jobs:
       run:
         working-directory: .
     steps:
+      - name: Set env ENVIRONMENT
+        run: |
+          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+
       - name: Checkout Repo
         uses: actions/checkout@v3
 
@@ -73,7 +77,9 @@ jobs:
           context: ./assistants-budget-be
           file: ./assistants-budget-be/Assistants.Budget.BE.API/Dockerfile
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.CURRENT_BRANCH }}-${{ env.IMAGE_TAG }}   
+          tags: |
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}   
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.ENVIRONMENT }}-latest
 
   deploy-env:
     name: "Update AWS env with new version of project"

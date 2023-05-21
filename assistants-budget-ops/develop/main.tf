@@ -30,6 +30,9 @@ module "assistants-budget-be-api-gateway" {
   assistants_budget_be_api_lambda_function_name = module.assistants-budget-be-api-lambda.lambda_name
   assistants_budget_be_api_lambda_invoke_arn    = module.assistants-budget-be-api-lambda.lambda_arn
   api_gateway_http_api_stage_name               = "develop"
+  api_gateway_http_api_domain_name              = var.assistants_budget_be_api_domain_name
+  acm_certificate_arn                           = var.acm_certificate_arn
+  route53_hostedzone_id                         = var.assistants_budget_ui_route53_hostedzone_id
   api_gateway_cors_options = {
     allow_headers  = "*"
     allow_origin   = "*"

@@ -8,12 +8,12 @@ namespace Assistants.Budget.BE.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TransactionController : ControllerBase
+public class HomeController : ControllerBase
 {
-    private readonly ILogger<TransactionController> logger;
+    private readonly ILogger<HomeController> logger;
     private readonly IMediator mediator;
 
-    public TransactionController(ILogger<TransactionController> logger, IMediator mediator)
+    public HomeController(ILogger<HomeController> logger, IMediator mediator)
     {
         this.logger = logger;
         this.mediator = mediator;

@@ -1,7 +1,7 @@
 ﻿using Assistants.Budget.BE.Mediator;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediator();
 
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+
 
 var app = builder.Build();
 
@@ -24,6 +24,10 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 

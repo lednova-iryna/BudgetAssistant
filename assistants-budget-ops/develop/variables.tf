@@ -14,3 +14,6 @@ variable "assistants_budget_ui_route53_hostedzone_id" {
 variable "assistants_budget_be_api_docker_image_url" {
 
 }
+variable "assistants_budget_be_api_domain_name" {
+
+}

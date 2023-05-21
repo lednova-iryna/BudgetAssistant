@@ -15,14 +15,13 @@ RUN dotnet restore "Assistants.Budget.BE.API/Assistants.Budget.BE.API.csproj"
 
 WORKDIR "/src/Assistants.Budget.BE.API"
 
-RUN ls -a
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     RID=linux-x64 ; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
     RID=linux-arm64 ; \
     fi \
-    && dotnet publish -c Release -o /app/publish $RID
+    && dotnet publish ./Assistants.Budget.BE.API.csproj -c Release -o /app/publish $RID
 
 FROM base AS final
 WORKDIR /app

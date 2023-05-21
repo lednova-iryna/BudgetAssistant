@@ -21,7 +21,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
     RID=linux-arm64 ; \
     fi \
-    && dotnet publish ./Assistants.Budget.BE.API.csproj -c Release -o /app/publish $RID
+    && dotnet publish ./Assistants.Budget.BE.API.csproj -c Release -o /app/publish -r $RID
 
 FROM base AS final
 WORKDIR /app

@@ -124,5 +124,5 @@ jobs:
           IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
         run: |
           aws lambda update-function-code \
-            --function-name ${{ vars.AWS_LAMBDA_NAME_BE_API }} 
+            --function-name ${{ vars.AWS_LAMBDA_NAME_BE_API }} \
             --image-url ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }} 

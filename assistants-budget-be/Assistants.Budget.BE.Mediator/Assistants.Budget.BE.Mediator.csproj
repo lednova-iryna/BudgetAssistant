@@ -11,12 +11,6 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Transactions\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transactions\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Assistants.Budget.BE.Domain\Assistants.Budget.BE.Domain.csproj" />
   </ItemGroup>
 </Project>

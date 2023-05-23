@@ -17,6 +17,6 @@ variable "aws_lambda_timeout" {
 variable "aws_lambda_docker_image_url" {
   description = "ECR image URI containing the function's deployment package."
 }
-variable "aws_lambda_parameter_name" {
-  description = "AWS Parameter Store variable name used for BE configs distribution."
+variable "aws_lambda_parameter_names" {
+  description = "Separated with `;` AWS Parameter Store variable name used for BE configs distribution."
 }

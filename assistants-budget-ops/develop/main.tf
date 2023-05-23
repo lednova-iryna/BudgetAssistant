@@ -18,7 +18,7 @@ module "assistants-budget-be-api-lambda" {
   aws_lambda_architecture     = "arm64"
   aws_lambda_docker_image_url = var.assistants_budget_be_api_docker_image_url
   aws_lambda_memory_size      = 256
-  aws_lambda_parameter_name   = "/develop/assistants-budget-be-api-lambda"
+  aws_lambda_parameter_names  = "/develop/assistants-budget-be-api/"
   aws_lambda_timeout          = 60
   aws_lambda_name             = "assistants-budget-be-api-lambda-develop"
 }

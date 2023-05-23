@@ -34,9 +34,9 @@ resource "aws_lambda_function" "this" {
 
   environment {
     variables = {
-      Aws__Parameters__Name                  = var.aws_lambda_parameter_name
+      Aws__Parameters__Names                 = var.aws_lambda_parameter_names
       Aws__Parameters__Ignore                = false
-      Aws__Parameters__SecretPollingInterval = 24
+      Aws__Parameters__SecretPollingInterval = 3600
     }
   }
 

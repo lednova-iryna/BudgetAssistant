@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Amazon.Extensions.NETCore.Setup;
 using dotenv.net;
 using Assistants.Budget.BE.Options;
+using Assistants.Aws.Parameters.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,12 @@ builder.Services.AddSwagger(true);
 OptionsExtensions.LoadOptions<DatabaseOptions, DatabaseOptionsValidator>(builder.Configuration, builder.Services);
 
 var app = builder.Build();
+
+if(AwsParametersConnectionState.ConnectionState != SecretsManagerConnectionStateEnum.Connected)
+{
+    throw AwsParametersConnectionState.ConnectionException!;
+}
+
 app.UseSwagger(true);
 app.UseAuthorization();
 app.MapControllers();

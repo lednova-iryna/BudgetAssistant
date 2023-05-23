@@ -6,3 +6,5 @@
 **/.env*
 **/sonar
 **/postgresql
+
+**/*.tfvars

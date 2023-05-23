@@ -1,0 +1,128 @@
+name: Assistants. Budget - BE
+
+on:
+  push:
+    branches: ["develop", "main"]
+    paths:
+      - "assistants-budget-be/**"
+      - "!**/README.md"
+      - "!**/gitignore"
+      - "!**/.husky/**"
+      - "!**/.vscode/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Environment
+        options:
+          - "develop"
+          - "production"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push:
+    name: "Build Docker image and push to ECR"
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Set env ENVIRONMENT
+        run: |
+          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1     
+
+      - name: Set GIT Commit SHA 
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: 'arm64,amd64'
+
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+          docker context create builders
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/amd64,linux/arm64
+          endpoint: builders
+
+      - name: Build, tag, and push image to Docker Hub
+        uses: docker/build-push-action@v3
+        env:
+          ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY_BE_API }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+          IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
+        with:
+          platforms: linux/arm64
+          context: ./assistants-budget-be
+          file: ./assistants-budget-be/Assistants.Budget.BE.API/Dockerfile
+          push: true
+          tags: |
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}   
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.ENVIRONMENT }}-latest
+
+  deploy-env:
+    name: "Update AWS env with new version of project"
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build-and-push
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Set env ENVIRONMENT
+        run: |
+          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+          echo "TF_CHDIR=${{ github.event.inputs.environment }}/assistants-budget-be-api-lambda" >> "$GITHUB_ENV"
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Set GIT Commit SHA 
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: AWS Lambda Deploy
+        env:
+          ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY_BE_API }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+          IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ vars.AWS_LAMBDA_NAME_BE_API }} \
+            --image-uri ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }} 

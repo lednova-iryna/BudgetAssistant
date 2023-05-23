@@ -1,3 +1,7 @@
+# Architecture
+
+![](./docs/architecture-general.drawio.svg)
+
 # Ops
 
 ## Initial manual setup
@@ -29,6 +33,10 @@ As an initial setup for a fresh environment, before executing Terraform scripts 
 4. Run [Assistants. Budget - Ops](./.github/workflows/ops.yml) pipeline to setup env;
    1. Make sure to select appropriate Environment before execution of GitHub Action;
 
+
+TODO:
+- Describe: Create ECR (using terraform, comment everything else), builde and deploy BE with actions to ECR, run all other terraforms.
+- Describe: how to add new Parameter into AWS
 
 # BudgetAssistantUI
 

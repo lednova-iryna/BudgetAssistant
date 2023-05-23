@@ -11,3 +11,9 @@ variable "assistants_budget_ui_cloudfront_domain_name" {
 variable "assistants_budget_ui_route53_hostedzone_id" {
   description = "AWS Route53 Hosted Zone ID for CloudFront distribution alias"
 }
+variable "assistants_budget_be_api_docker_image_url" {
+
+}
+variable "assistants_budget_be_api_domain_name" {
+
+}

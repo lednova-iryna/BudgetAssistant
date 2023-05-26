@@ -17,6 +17,10 @@ public static class SwaggerConfigurator
                 "v1",
                 new OpenApiInfo { Title = "Assistants: Budget API", Version = "v1" }
             );
+            options.AddServer(new OpenApiServer
+            {
+                Url = "/"
+            });
 
             //options.IncludeXmlComments(
             //    Path.Combine(

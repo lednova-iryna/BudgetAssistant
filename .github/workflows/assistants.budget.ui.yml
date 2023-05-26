@@ -2,7 +2,7 @@ name: Assistants. Budget - UI
 
 on:
   push:
-    branches: ["develop", "main"]
+    branches: ["develop"]
     paths:
       - "assistants-budget-ui/**"
       - "!**/README.md"
@@ -25,7 +25,7 @@ permissions:
 jobs:
   prepare:
     name: "Prepare project for build"
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment == '' && 'develop' || github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -54,7 +54,7 @@ jobs:
 
   build:
     name: "Build and Deploy UI to S3"
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment == '' && 'develop' || github.event.inputs.environment }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: prepare

@@ -2,7 +2,7 @@ name: Assistants. Budget - BE
 
 on:
   push:
-    branches: ["develop"]
+    branches: ["develop", "feature/swagger"]
     paths:
       - "assistants-budget-be/**"
       - "!**/README.md"
@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Set env ENVIRONMENT
         run: |
-          echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> "$GITHUB_ENV"
+          echo "ENVIRONMENT=${{ github.event.inputs.environment == '' && 'develop' || 'production' }}" >> "$GITHUB_ENV"
 
       - name: Checkout Repo
         uses: actions/checkout@v3

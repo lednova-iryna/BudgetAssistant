@@ -2,7 +2,7 @@ name: Assistants. Budget - BE
 
 on:
   push:
-    branches: ["develop", "main"]
+    branches: ["develop"]
     paths:
       - "assistants-budget-be/**"
       - "!**/README.md"

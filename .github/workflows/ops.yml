@@ -43,7 +43,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform -chdir=${{ env.ENVIRONMENT }} init
+        run: terraform -chdir=${{ env.ENVIRONMENT }} init -upgrade
         working-directory: assistants-budget-ops
 
       - name: Terraform Validate

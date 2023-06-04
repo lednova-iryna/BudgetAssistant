@@ -1,0 +1,30 @@
+﻿version: "3.9"
+services:
+  assistants-budget-database:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
+    container_name: assistants-budget-database
+    networks:
+      - test_network
+  assistants-mongo-express:
+    image: mongo-express:latest
+    restart: always
+    ports:
+      - "3000:8081"
+    depends_on:
+      - assistants-budget-database
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=assistants-budget-database
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${DATABASE_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${DATABASE_PASSWORD}
+    networks:
+      - test_network
+networks:
+  test_network:
+    name: assistants-budget-test-network

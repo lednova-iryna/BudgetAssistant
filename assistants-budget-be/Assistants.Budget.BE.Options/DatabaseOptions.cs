@@ -8,6 +8,7 @@ namespace Assistants.Budget.BE.Options
         public override string SectionName => "Database";
 
         public string ConnectionString { get; set; }
+        public string Name { get; set; }
     }
 }
 

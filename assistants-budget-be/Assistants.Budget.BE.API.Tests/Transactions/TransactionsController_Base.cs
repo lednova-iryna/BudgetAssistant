@@ -3,20 +3,35 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Assistants.Budget.BE.Domain;
 using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 using System.Net;
+using Assistants.Budget.BE.API.Tests.Helpers;
+using MongoDB.Driver;
+using Microsoft.Extensions.Options;
+using Assistants.Budget.BE.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Assistants.Budget.BE.API.Tests;
 
 [Collection("TransactionsApi")]
-public class TransactionsController : IClassFixture<TestWebAppFactory<Program>>
+public partial class TransactionsController : IClassFixture<TestWebAppFactory<Program>>, IDisposable
 {
 
-    private readonly TestWebAppFactory<Program> _factory;
-    private readonly HttpClient _httpClient;
+    private readonly TestWebAppFactory<Program> appFactory;
+    private readonly HttpClient appHttpClient;
+    private readonly IServiceScope scope;
+    private readonly MongoClient mongoClient;
+    private readonly DatabaseOptions databaseOptions;
+    private readonly string rootUrl = "/transactions";
 
     public TransactionsController(TestWebAppFactory<Program> factory)
     {
-        _factory = factory;
-        _httpClient = factory.CreateClient();
+        appFactory = factory;
+        appHttpClient = factory.CreateClient();
+
+        scope = appFactory.Services.CreateScope();
+        mongoClient = scope.ServiceProvider.GetService<MongoClient>()!;
+        databaseOptions = scope.ServiceProvider.GetService<IOptions<DatabaseOptions>>()!.Value;
+
+        mongoClient.DropDatabase(databaseOptions.Name);
     }
 
     public static IEnumerable<object[]> validCreateTransactionCommandSet = new List<TransactionsCreateCommand[]>
@@ -29,25 +44,13 @@ public class TransactionsController : IClassFixture<TestWebAppFactory<Program>>
     public static IEnumerable<object[]> invalidCreateTransactionCommandSet = new List<TransactionsCreateCommand[]>
     {
         new [] { new TransactionsCreateCommand { Type = TransactionType.Income, Date = new DateTime(), Note = "Test Note" } },
-        new [] { new TransactionsCreateCommand { Type = TransactionType.Income, Amount=10,  Note = "Test Note" } },
+        new [] { new TransactionsCreateCommand { Type = TransactionType.Income, Amount = 10, Note = "Test Note" } },
         new [] { new TransactionsCreateCommand { Type = TransactionType.Income, Note = "Test Note" } },
         new [] { new TransactionsCreateCommand { Date = new DateTime(), Note = "Test Note" } }
     };
 
-    [Theory]
-    [MemberData(nameof(validCreateTransactionCommandSet))]
-    public async Task CreateTransactionAsync(TransactionsCreateCommand command)
+    public async void Dispose()
     {
-        var response = await _httpClient.PutAsJsonAsync("/transactions", command);
-        var responseString = await response.Content.ReadAsStringAsync();
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-    }
-
-    [Theory]
-    [MemberData(nameof(invalidCreateTransactionCommandSet))]
-    public async Task CreateTransactionValidationAsync(TransactionsCreateCommand command)
-    {
-        var response = await _httpClient.PutAsJsonAsync("/transactions", command);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await mongoClient.DropDatabaseAsync(databaseOptions.Name);
     }
 }

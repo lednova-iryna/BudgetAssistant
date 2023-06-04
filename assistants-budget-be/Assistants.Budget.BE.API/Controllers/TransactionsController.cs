@@ -5,6 +5,7 @@ using Assistants.Budget.BE.Domain;
 using Microsoft.Extensions.Options;
 using Assistants.Budget.BE.Options;
 using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
+using Assistants.Budget.BE.API.Models;
 
 namespace Assistants.Budget.BE.API.Controllers;
 
@@ -24,13 +25,29 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<Transaction>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
     public async Task<IEnumerable<Transaction>> GetAsync([FromQuery] TransactionsQuery query)
     {
         return await mediator.Send(query);
     }
 
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Transaction), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<Transaction?> GetByIdAsync(Guid id)
+    {
+        TransactionsQueryOne query = new()
+        {
+            Id = id
+        };
+        return await mediator.Send(query);
+    }
 
     [HttpPut]
+    [ProducesResponseType(typeof(Transaction), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] TransactionsCreateCommand command)
     {
         var transaction = await mediator.Send(command);

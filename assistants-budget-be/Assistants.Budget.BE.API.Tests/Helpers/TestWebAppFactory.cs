@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
 
-namespace Assistants.Budget.BE.API.Tests;
+namespace Assistants.Budget.BE.API.Tests.Helpers;
 
 public class TestWebAppFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class

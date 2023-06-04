@@ -1,15 +1,25 @@
 ﻿using System;
 using MediatR;
 using Assistants.Budget.BE.Domain;
+using FluentValidation;
 
 namespace Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 
 public class TransactionsQuery : IRequest<IEnumerable<Transaction>>
 {
-    public DateTime? FromDate { get; set; }
-    public DateTime? ToDate { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
     public TransactionType? Type { get; set; }
-    public Guid? Id { get; set; }
+
+    public class Validator : AbstractValidator<TransactionsQuery>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.FromDate).NotEmpty().NotNull();
+            RuleFor(x => x.ToDate).NotEmpty().NotNull();
+            RuleFor(x => x).Must(x => x.ToDate > x.FromDate).OverridePropertyName("ToDate").WithMessage("ToDate must be great than FromDate");
+        }
+    }
 
     public class Handler : IRequestHandler<TransactionsQuery, IEnumerable<Transaction>>
     {
@@ -20,14 +30,13 @@ public class TransactionsQuery : IRequest<IEnumerable<Transaction>>
             this.transactionsService = transactionsService;
         }
 
-        public Task<IEnumerable<Transaction>> Handle(
+        public async Task<IEnumerable<Transaction>> Handle(
              TransactionsQuery request,
              CancellationToken cancellationToken
         )
         {
-            return Task.FromResult(new List<Transaction>() { new Transaction {
-            Amount = 123
-        } }.AsEnumerable());
+            new Validator().ValidateAndThrow(request);
+            return await transactionsService.Get(request, cancellationToken);
         }
     }
 }

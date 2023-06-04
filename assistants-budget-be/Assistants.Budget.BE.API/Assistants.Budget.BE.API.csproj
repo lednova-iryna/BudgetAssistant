@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assistants.Budget.BE.Mediator\Assistants.Budget.BE.Mediator.csproj">
+    <ProjectReference Include="..\Assistants.Budget.BE.BusinessLogic\Assistants.Budget.BE.BusinessLogic.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\Assistants.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj">
@@ -26,5 +26,16 @@
     <ProjectReference Include="..\Assistants.Budget.BE.Options\Assistants.Budget.BE.Options.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\Assistants.Budget.BE.MongoDB\Assistants.Budget.BE.MongoDB.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Middlewares\" />
+    <None Remove="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

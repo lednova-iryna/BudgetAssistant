@@ -5,7 +5,7 @@ VisualStudioVersion = 25.0.1705.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.API", "Assistants.Budget.BE.API\Assistants.Budget.BE.API.csproj", "{7CF84F16-6B61-4E21-B6A8-4F13AD997670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Mediator", "Assistants.Budget.BE.Mediator\Assistants.Budget.BE.Mediator.csproj", "{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.BusinessLogic", "Assistants.Budget.BE.BusinessLogic\Assistants.Budget.BE.BusinessLogic.csproj", "{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Domain", "Assistants.Budget.BE.Domain\Assistants.Budget.BE.Domain.csproj", "{EF90A4E6-62F1-4FA7-8809-0C4042640B3E}"
 EndProject
@@ -13,9 +13,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Extensions.Optio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Libs.Aws.Parameters", "Assistants.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj", "{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{A279D73D-DD2D-4EB4-8820-9B4AC7417268}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{A279D73D-DD2D-4EB4-8820-9B4AC7417268}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Options", "Assistants.Budget.BE.Options\Assistants.Budget.BE.Options.csproj", "{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Auth0", "Assistants.Budget.BE.Auth0\Assistants.Budget.BE.Auth0.csproj", "{4EA67619-1EB8-46B1-BD27-4956E37EE80D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.MongoDB", "Assistants.Budget.BE.MongoDB\Assistants.Budget.BE.MongoDB.csproj", "{4F32EFB5-5211-45F0-BE75-11267BF59516}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{56CF4B5C-2AB5-4454-BF4F-1161E92D82B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.API.Tests", "Assistants.Budget.BE.API.Tests\Assistants.Budget.BE.API.Tests.csproj", "{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +63,18 @@ Global
 		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F32EFB5-5211-45F0-BE75-11267BF59516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F32EFB5-5211-45F0-BE75-11267BF59516}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F32EFB5-5211-45F0-BE75-11267BF59516}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F32EFB5-5211-45F0-BE75-11267BF59516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +85,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
 		{A4ADF764-DBF7-452E-AA0E-E377451FB0FE} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
+		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67} = {56CF4B5C-2AB5-4454-BF4F-1161E92D82B8}
 	EndGlobalSection
 EndGlobal

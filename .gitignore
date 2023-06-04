@@ -6,5 +6,6 @@
 **/.env*
 **/sonar
 **/postgresql
-
 **/*.tfvars
+
+!/assistants-budget-be/Assistants.Budget.BE.API.Tests/.env

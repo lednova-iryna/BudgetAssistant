@@ -31,7 +31,7 @@ public static class AwsParametersConfigurator
         var awsOptions = OptionsExtensions.LoadOptions<AwsOptions, AwsOptionsValidator>(
             configurationBuilder.Build()
         );
-        if (awsOptions.Parameters.Ignore)
+        if (awsOptions.Parameters?.Ignore == true || awsOptions.Parameters?.Ignore == null)
             return configurationBuilder;
 
         return ParameterStoreHelper.AddAWSParameterStore(

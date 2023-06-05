@@ -6,11 +6,13 @@ using Microsoft.Extensions.Options;
 using Assistants.Budget.BE.Options;
 using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 using Assistants.Budget.BE.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Assistants.Budget.BE.API.Controllers;
 
 [ApiController]
 [Route("transactions")]
+[Authorize]
 public class TransactionsController : ControllerBase
 {
     private readonly ILogger<TransactionsController> logger;

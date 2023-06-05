@@ -11,7 +11,7 @@ public static class Configurator
 {
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        var options = OptionsExtensions.LoadOptions<DatabaseOptions, DatabaseOptionsValidator>(configuration, services);
+        var options = OptionsExtensions.LoadOptions<DatabaseOptions, DatabaseOptions.Validator>(configuration, services);
         var settings = MongoClientSettings.FromConnectionString(options.ConnectionString);
         settings.ServerApi = new ServerApi(ServerApiVersion.V1);
 

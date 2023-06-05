@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Assistants.Budget.BE.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("transactions")]
-[Authorize]
 public class TransactionsController : ControllerBase
 {
     private readonly ILogger<TransactionsController> logger;

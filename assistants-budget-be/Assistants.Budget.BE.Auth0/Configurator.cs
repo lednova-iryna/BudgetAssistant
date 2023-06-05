@@ -13,17 +13,21 @@ public static class Configurator
 {
     public static void AddAuth0Module(this IServiceCollection services, IConfiguration configuration)
     {
-        var options = OptionsExtensions.LoadOptions<AuthOptions, AuthOptions.Validator>(configuration, services);
+        var authOptions = OptionsExtensions.LoadOptions<AuthOptions, AuthOptions.Validator>(configuration, services);
 
-        services.AddScoped<IAuthenticationApiClient, AuthenticationApiClient>(serviceProvider => new AuthenticationApiClient(new Uri(options.Domain)));
+        services.AddScoped<IAuthenticationApiClient, AuthenticationApiClient>(serviceProvider => new AuthenticationApiClient(new Uri(authOptions.Domain)));
         services.AddSingleton<IManagementConnection, HttpClientManagementConnection>();
         services.AddScoped<Auth0ManagementApiClient>();
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = options.Authority;
-                options.Audience = options.Audience;
+                options.Authority = authOptions.Domain;
+                options.Audience = authOptions.Audience;
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidAudience = authOptions.Audience
+                };
             });
     }
 }

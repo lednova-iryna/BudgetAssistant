@@ -14,7 +14,6 @@ public static class SwaggerConfigurator
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration)
     {
         var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOptions.Validator>(configuration);
-        var authOptions = OptionsExtensions.LoadOptions<AuthOptions, AuthOptions.Validator>(configuration);
 
         if (!generalOptions.IsSwaggerEnabled)
             return;
@@ -93,42 +92,21 @@ public static class SwaggerConfigurator
 
 
 
-            //options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //{
-            //    {
-            //        new OpenApiSecurityScheme
-            //        {
-            //            Reference = new OpenApiReference
-            //            {
-            //                Type = ReferenceType.SecurityScheme,
-            //                Id = Policies.CoreApi
-            //            }
-            //        },
-            //        new[] { Scopes.CoreApi }
-            //    },
-            //    {
-            //        new OpenApiSecurityScheme
-            //        {
-            //            Reference = new OpenApiReference
-            //            {
-            //                Type = ReferenceType.SecurityScheme,
-            //                Id = Policies.AdministrativeApi
-            //            }
-            //        },
-            //        new[] { Scopes.CoreApi, Scopes.AdministrativeApi }
-            //    },
-            //    {
-            //        new OpenApiSecurityScheme
-            //        {
-            //            Reference = new OpenApiReference
-            //            {
-            //                Type = ReferenceType.SecurityScheme,
-            //                Id = "Bearer"
-            //            }
-            //        },
-            //        new string[] { }
-            //    }
-            //});
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                { 
+                    new OpenApiSecurityScheme
+                    {
+                        Name = "Bearer",
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
         services.AddSwaggerGenNewtonsoftSupport();
     }
@@ -141,9 +119,7 @@ public static class SwaggerConfigurator
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            var authOptions = app.Services.GetService<IOptions<AuthOptions>>().Value;
             options.SwaggerEndpoint($"/swagger/v1/swagger.json", "Assistants: Budget API");
-           // options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) {req.body += '&audience=" + authOptions.Audience + "';} return req; }");
         });
     }
 }

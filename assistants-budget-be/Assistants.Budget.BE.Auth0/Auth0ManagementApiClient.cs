@@ -43,8 +43,8 @@ public class Auth0ManagementApiClient
             var token = await authenticationApiClient.GetTokenAsync(new ClientCredentialsTokenRequest
             {
                 Audience = authOptions.Audience,
-                ClientId = clientId,
-                ClientSecret = clientSecret,
+                ClientId = authOptions.ClientId ?? clientId,
+                ClientSecret = authOptions.ClientSecret ?? clientSecret,
             }, cancellationToken);
             memoryCache.Set(TokenCacheKey, token.AccessToken, TimeSpan.FromSeconds(token.ExpiresIn - 1));
 

@@ -1,7 +1,6 @@
-﻿using System;
-using MediatR;
-using Assistants.Budget.BE.Domain;
+﻿using Assistants.Budget.BE.Domain;
 using FluentValidation;
+using MediatR;
 
 namespace Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 
@@ -26,14 +25,10 @@ public class TransactionsQueryOne : IRequest<Transaction>
             this.transactionsService = transactionsService;
         }
 
-        public async Task<Transaction> Handle(
-             TransactionsQueryOne request,
-             CancellationToken cancellationToken
-        )
+        public async Task<Transaction> Handle(TransactionsQueryOne request, CancellationToken cancellationToken)
         {
             await new Validator().ValidateAndThrowAsync(request, cancellationToken);
             return await transactionsService.GetById(request.Id, cancellationToken);
         }
     }
 }
-

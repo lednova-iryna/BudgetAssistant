@@ -8,9 +8,12 @@ namespace Assistants.Extensions.Options;
 
 public static class OptionsExtensions
 {
-    public static TOptions LoadOptions<TOptions, TOptionsValidator>(IConfiguration configuration, IServiceCollection? services = null)
-           where TOptions : BaseOptions, new()
-           where TOptionsValidator : AbstractValidator<TOptions>, new()
+    public static TOptions LoadOptions<TOptions, TOptionsValidator>(
+        IConfiguration configuration,
+        IServiceCollection? services = null
+    )
+        where TOptions : BaseOptions, new()
+        where TOptionsValidator : AbstractValidator<TOptions>, new()
     {
         var options = new TOptions();
         var section = configuration.GetSection(options.SectionName);
@@ -29,4 +32,3 @@ public static class OptionsExtensions
         return options!;
     }
 }
-

@@ -1,59 +1,63 @@
-﻿using System;
+﻿using System.Reflection;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
+using Assistants.Budget.BE.Options;
+using Assistants.Extensions.Options;
 
 namespace Assistants.Budget.BE.API.Configurators;
 
 public static class SwaggerConfigurator
 {
-    public static void AddSwagger(this IServiceCollection services, bool isEnables)
+    public static void AddSwagger(this IServiceCollection services, IConfiguration configuration)
     {
-        if (!isEnables)
+        var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOptions.Validator>(configuration);
+
+        if (!generalOptions.IsSwaggerEnabled)
             return;
 
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc(
-                "v1",
-                new OpenApiInfo { Title = "Assistants: Budget API", Version = "v1" }
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Assistants: Budget API", Version = "v1" });
+            options.AddServer(new OpenApiServer { Url = "/" });
+
+            options.AddSecurityDefinition(
+                "Bearer",
+                new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                }
             );
-            options.AddServer(new OpenApiServer
-            {
-                Url = "/"
-            });
 
-            //options.IncludeXmlComments(
-            //    Path.Combine(
-            //        AppContext.BaseDirectory,
-            //        $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"
-            //    )
-            //);
+            options.IncludeXmlComments(
+                Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml")
+            );
 
+            options.AddSecurityDefinition(
+                "oauth2",
+                new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        ClientCredentials = new OpenApiOAuthFlow
+                        {
+                            TokenUrl = new Uri($"/auth/token", UriKind.Relative),
+                        }
+                    },
+                    Description = "API"
+                }
+            );
             //options.IncludeXmlComments(
             //    Path.Combine(
             //        AppContext.BaseDirectory,
             //        $"{typeof(ErrorCodes).Assembly.GetName().Name}.xml"));
 
 
-            //options.AddSecurityDefinition(Policies.CoreApi,
-            //    new OpenApiSecurityScheme
-            //    {
-            //        Type = SecuritySchemeType.OAuth2,
-            //        Flows = new OpenApiOAuthFlows
-            //        {
-            //            ClientCredentials = new OpenApiOAuthFlow
-            //            {
-            //                TokenUrl = new Uri("/connect/token", UriKind.Relative),
-            //                Scopes =
-            //                {
-            //        {
-            //            Scopes.CoreApi, "Core API Scope"
-            //        }
-            //                }
-            //            }
-            //        },
-            //        Description = "Core API"
-            //    });
+
 
             //options.AddSecurityDefinition(Policies.AdministrativeApi,
             //    new OpenApiSecurityScheme
@@ -74,55 +78,21 @@ public static class SwaggerConfigurator
             //        Description = "Administrative API"
             //    });
 
-            //options.AddSecurityDefinition(
-            //    "Bearer",
-            //    new OpenApiSecurityScheme
-            //    {
-            //        In = ParameterLocation.Header,
-            //        Description = "Please enter a valid token",
-            //        Name = "Authorization",
-            //        Type = SecuritySchemeType.Http,
-            //        BearerFormat = "JWT",
-            //        Scheme = "Bearer"
-            //    }
-            //);
 
-            //options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //{
-            //    {
-            //        new OpenApiSecurityScheme
-            //        {
-            //            Reference = new OpenApiReference
-            //            {
-            //                Type = ReferenceType.SecurityScheme,
-            //                Id = Policies.CoreApi
-            //            }
-            //        },
-            //        new[] { Scopes.CoreApi }
-            //    },
-            //    {
-            //        new OpenApiSecurityScheme
-            //        {
-            //            Reference = new OpenApiReference
-            //            {
-            //                Type = ReferenceType.SecurityScheme,
-            //                Id = Policies.AdministrativeApi
-            //            }
-            //        },
-            //        new[] { Scopes.CoreApi, Scopes.AdministrativeApi }
-            //    },
-            //    {
-            //        new OpenApiSecurityScheme
-            //        {
-            //            Reference = new OpenApiReference
-            //            {
-            //                Type = ReferenceType.SecurityScheme,
-            //                Id = "Bearer"
-            //            }
-            //        },
-            //        new string[] { }
-            //    }
-            //});
+
+            options.AddSecurityRequirement(
+                new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Name = "Bearer",
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        Array.Empty<string>()
+                    }
+                }
+            );
         });
         services.AddSwaggerGenNewtonsoftSupport();
     }

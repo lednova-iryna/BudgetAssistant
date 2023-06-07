@@ -1,5 +1,4 @@
-﻿using System;
-using Assistants.Budget.BE.Domain;
+﻿using Assistants.Budget.BE.Domain;
 using FluentValidation;
 using MediatR;
 
@@ -21,6 +20,7 @@ public class TransactionsCreateCommand : IRequest<Transaction>
             RuleFor(x => x.Type).NotNull();
         }
     }
+
     public class Handler : IRequestHandler<TransactionsCreateCommand, Transaction>
     {
         private readonly TransactionsService transactionsService;
@@ -29,6 +29,7 @@ public class TransactionsCreateCommand : IRequest<Transaction>
         {
             this.transactionsService = transactionsService;
         }
+
         public async Task<Transaction> Handle(TransactionsCreateCommand request, CancellationToken cancellationToken)
         {
             await new Validator().ValidateAndThrowAsync(request, cancellationToken);
@@ -36,4 +37,3 @@ public class TransactionsCreateCommand : IRequest<Transaction>
         }
     }
 }
-

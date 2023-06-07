@@ -13,11 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Assistants.Budget.BE.Domain\Assistants.Budget.BE.Domain.csproj" />
     <ProjectReference Include="..\Assistants.Budget.BE.MongoDB\Assistants.Budget.BE.MongoDB.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Transactions\CQRS\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transactions\CQRS\" />
+    <ProjectReference Include="..\Assistants.Budget.BE.Auth0\Assistants.Budget.BE.Auth0.csproj" />
   </ItemGroup>
 </Project>

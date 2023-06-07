@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Assistants.Budget.BE.BusinessLogic.Transactions;
 using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Assistants.Budget.BE.BusinessLogic;
 
-public static class AddMediatorConfiguration
+public static class Configurator
 {
     public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
     {
@@ -19,4 +18,3 @@ public static class AddMediatorConfiguration
             .AddValidatorsFromAssemblyContaining<TransactionsCreateCommand.Validator>();
     }
 }
-

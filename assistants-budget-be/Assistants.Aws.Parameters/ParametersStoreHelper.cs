@@ -18,8 +18,7 @@ public static class ParameterStoreHelper
         StringBuilder errMsg = new StringBuilder();
 
         AWSOptions options = new AWSOptions();
-        AwsCredentialsLocator.AwsEndpointCredentials awsEndpointCredentials =
-            AwsCredentialsLocator.LocateCredentials();
+        AwsCredentialsLocator.AwsEndpointCredentials awsEndpointCredentials = AwsCredentialsLocator.LocateCredentials();
 
         options.Credentials = awsEndpointCredentials.Credentials;
         options.Region = awsEndpointCredentials.RegionEndpoint;
@@ -28,28 +27,18 @@ public static class ParameterStoreHelper
         {
             try
             {
-                configurationBuilder.AddSystemsManager(
-                    Path.Combine("/", parameter),
-                    options,
-                    false
-                );
+                configurationBuilder.AddSystemsManager(Path.Combine("/", parameter), options, false);
             }
             catch (Exception exception)
             {
-                errMsg.AppendLine(
-                    $@"Unable to fetch parameter {parameter}, {exception.InnerException.Message}"
-                );
+                errMsg.AppendLine($@"Unable to fetch parameter {parameter}, {exception.InnerException.Message}");
             }
         }
 
         if (errMsg.Length > 0)
         {
-            AwsParametersConnectionState.ConnectionState =
-                SecretsManagerConnectionStateEnum.ConnectionError;
-            AwsParametersConnectionState.ConnectionException = new(
-                errMsg.ToString(),
-                new Exception()
-            );
+            AwsParametersConnectionState.ConnectionState = SecretsManagerConnectionStateEnum.ConnectionError;
+            AwsParametersConnectionState.ConnectionException = new(errMsg.ToString(), new Exception());
         }
 
         return configurationBuilder;

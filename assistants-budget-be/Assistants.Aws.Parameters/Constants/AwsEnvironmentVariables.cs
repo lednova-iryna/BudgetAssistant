@@ -1,5 +1,4 @@
-﻿using System;
-namespace Assistants.Aws.Parameters.Constants;
+﻿namespace Assistants.Aws.Parameters.Constants;
 
 public class AwsEnvironmentVariables
 {
@@ -9,5 +8,3 @@ public class AwsEnvironmentVariables
     public const string AwsDefaultRegion = "AWS_DEFAULT_REGION";
     public const string AwsDefaultProfileName = "default";
 }
-
-

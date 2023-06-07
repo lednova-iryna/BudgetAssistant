@@ -1,12 +1,11 @@
-﻿using MediatR;
-using System.Net.NetworkInformation;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Assistants.Budget.BE.Domain;
 using Microsoft.Extensions.Options;
-using Assistants.Budget.BE.Options;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 using Assistants.Budget.BE.API.Models;
-using Microsoft.AspNetCore.Authorization;
+using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
+using Assistants.Budget.BE.Domain;
+using Assistants.Budget.BE.Options;
+using MediatR;
 
 namespace Assistants.Budget.BE.API.Controllers;
 
@@ -19,7 +18,11 @@ public class TransactionsController : ControllerBase
     private readonly IMediator mediator;
     private readonly DatabaseOptions databaseOptions;
 
-    public TransactionsController(ILogger<TransactionsController> logger, IMediator mediator, IOptions<DatabaseOptions> databaseOptions)
+    public TransactionsController(
+        ILogger<TransactionsController> logger,
+        IMediator mediator,
+        IOptions<DatabaseOptions> databaseOptions
+    )
     {
         this.logger = logger;
         this.mediator = mediator;
@@ -40,10 +43,7 @@ public class TransactionsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
     public async Task<Transaction?> GetByIdAsync(Guid id)
     {
-        TransactionsQueryOne query = new()
-        {
-            Id = id
-        };
+        TransactionsQueryOne query = new() { Id = id };
         return await mediator.Send(query);
     }
 

@@ -1,13 +1,9 @@
-﻿using System;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using System.Data;
+using Assistants.Budget.BE.Options;
 using Auth0.AuthenticationApi;
 using Auth0.AuthenticationApi.Models;
 using Auth0.ManagementApi;
-using Auth0.ManagementApi.Models;
-using Auth0.ManagementApi.Paging;
-using Assistants.Budget.BE.Options;
 
 namespace Assistants.Budget.BE.Auth0;
 
@@ -24,7 +20,8 @@ public class Auth0ManagementApiClient
         IManagementConnection managementConnection,
         IOptions<AuthOptions> authOptions,
         IAuthenticationApiClient authenticationApiClient,
-        IMemoryCache memoryCache)
+        IMemoryCache memoryCache
+    )
     {
         this.managementConnection = managementConnection;
         this.authOptions = authOptions.Value;
@@ -40,12 +37,15 @@ public class Auth0ManagementApiClient
         }
         try
         {
-            var token = await authenticationApiClient.GetTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Audience = authOptions.Audience,
-                ClientId = authOptions.ClientId ?? clientId,
-                ClientSecret = authOptions.ClientSecret ?? clientSecret,
-            }, cancellationToken);
+            var token = await authenticationApiClient.GetTokenAsync(
+                new ClientCredentialsTokenRequest
+                {
+                    Audience = authOptions.Audience,
+                    ClientId = authOptions.ClientId ?? clientId,
+                    ClientSecret = authOptions.ClientSecret ?? clientSecret,
+                },
+                cancellationToken
+            );
             memoryCache.Set(TokenCacheKey, token.AccessToken, TimeSpan.FromSeconds(token.ExpiresIn - 1));
 
             return token.AccessToken;
@@ -56,5 +56,3 @@ public class Auth0ManagementApiClient
         }
     }
 }
-
-

@@ -21,7 +21,7 @@ public class AwsCredentialsLocator
         {
             result.Credentials = AssumeRoleWithWebIdentityCredentials.FromEnvironmentVariables();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             // ignored
         }
@@ -32,20 +32,14 @@ public class AwsCredentialsLocator
                 Environment.GetEnvironmentVariable(AwsEnvironmentVariables.AwsProfile)
                 ?? AwsEnvironmentVariables.AwsDefaultProfileName;
 
-            if (
-                new CredentialProfileStoreChain().TryGetProfile(
-                    profileName,
-                    out CredentialProfile? profile
-                )
-            )
+            if (new CredentialProfileStoreChain().TryGetProfile(profileName, out CredentialProfile? profile))
             {
                 result.Credentials = profile.GetAWSCredentials(profile.CredentialProfileStore);
                 result.RegionEndpoint = profile.Region;
             }
             else if (
                 Environment.GetEnvironmentVariable(AwsEnvironmentVariables.AwsAccessKeyId) != null
-                && Environment.GetEnvironmentVariable(AwsEnvironmentVariables.AwsSecretAccessKey)
-                    != null
+                && Environment.GetEnvironmentVariable(AwsEnvironmentVariables.AwsSecretAccessKey) != null
             )
             {
                 result.Credentials = new EnvironmentVariablesAWSCredentials();
@@ -56,21 +50,18 @@ public class AwsCredentialsLocator
                 {
                     result.Credentials = new InstanceProfileAWSCredentials();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     // ignored
                 }
             }
         }
 
-        string? region = Environment.GetEnvironmentVariable(
-            AwsEnvironmentVariables.AwsDefaultRegion
-        ) ?? "us-east-1";
+        string? region = Environment.GetEnvironmentVariable(AwsEnvironmentVariables.AwsDefaultRegion) ?? "us-east-1";
 
         if (region != null)
         {
-            result.RegionEndpoint =
-                RegionEndpoint.GetBySystemName(region) ?? RegionEndpoint.USEast1;
+            result.RegionEndpoint = RegionEndpoint.GetBySystemName(region) ?? RegionEndpoint.USEast1;
         }
 
         return result;

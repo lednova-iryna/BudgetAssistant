@@ -1,5 +1,4 @@
-﻿using System;
-using Assistants.Extensions.Options;
+﻿using Assistants.Extensions.Options;
 
 namespace Assistants.Aws.Parameters.Options;
 
@@ -9,9 +8,9 @@ public class AwsParametersOptions : BaseOptions
 
     public bool Ignore { get; set; } = true;
     public string? Names { get; set; }
+
     /// <summary>
     /// Seconds
     /// </summary>
     public int SecretPollingInterval { get; set; } = 60 * 60 * 24;
 }
-

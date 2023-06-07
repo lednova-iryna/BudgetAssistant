@@ -9,4 +9,3 @@ public class AwsOptionsValidator : AbstractValidator<AwsOptions>
         var sectionName = new AwsOptions().SectionName;
     }
 }
-

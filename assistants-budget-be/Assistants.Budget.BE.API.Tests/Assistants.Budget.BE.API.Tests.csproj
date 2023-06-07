@@ -29,6 +29,7 @@
   <ItemGroup>
     <None Remove="Transactions\" />
     <None Remove="Helpers\" />
+    <None Remove="Mocks\" />
   </ItemGroup>
   <ItemGroup>
     <None Update=".env">
@@ -38,5 +39,6 @@
   <ItemGroup>
     <Folder Include="Transactions\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Mocks\" />
   </ItemGroup>
 </Project>

@@ -1,11 +1,7 @@
-﻿using System;
+﻿using System.Reflection;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using Assistants.Budget.BE.Options;
 using Assistants.Extensions.Options;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Any;
-using Microsoft.Extensions.Options;
 
 namespace Assistants.Budget.BE.API.Configurators;
 
@@ -20,14 +16,8 @@ public static class SwaggerConfigurator
 
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc(
-                "v1",
-                new OpenApiInfo { Title = "Assistants: Budget API", Version = "v1" }
-            );
-            options.AddServer(new OpenApiServer
-            {
-                Url = "/"
-            });
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Assistants: Budget API", Version = "v1" });
+            options.AddServer(new OpenApiServer { Url = "/" });
 
             options.AddSecurityDefinition(
                 "Bearer",
@@ -43,13 +33,11 @@ public static class SwaggerConfigurator
             );
 
             options.IncludeXmlComments(
-                Path.Combine(
-                    AppContext.BaseDirectory,
-                    $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"
-                )
+                Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml")
             );
 
-            options.AddSecurityDefinition("oauth2",
+            options.AddSecurityDefinition(
+                "oauth2",
                 new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
@@ -58,11 +46,11 @@ public static class SwaggerConfigurator
                         ClientCredentials = new OpenApiOAuthFlow
                         {
                             TokenUrl = new Uri($"/auth/token", UriKind.Relative),
-
                         }
                     },
                     Description = "API"
-                });
+                }
+            );
             //options.IncludeXmlComments(
             //    Path.Combine(
             //        AppContext.BaseDirectory,
@@ -92,21 +80,19 @@ public static class SwaggerConfigurator
 
 
 
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                { 
-                    new OpenApiSecurityScheme
+            options.AddSecurityRequirement(
+                new OpenApiSecurityRequirement
+                {
                     {
-                        Name = "Bearer",
-                        Reference = new OpenApiReference
+                        new OpenApiSecurityScheme
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
+                            Name = "Bearer",
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        Array.Empty<string>()
+                    }
                 }
-            });
+            );
         });
         services.AddSwaggerGenNewtonsoftSupport();
     }

@@ -1,10 +1,8 @@
-﻿using System.Net.Http.Json;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-using Assistants.Budget.BE.Domain;
+﻿using System.Net;
+using System.Net.Http.Json;
 using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
-using System.Net;
 
-namespace Assistants.Budget.BE.API.Tests;
+namespace Assistants.Budget.BE.API.Tests.Transactions;
 
 public partial class TransactionsController
 {

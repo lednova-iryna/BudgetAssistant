@@ -7,4 +7,3 @@ public enum SecretsManagerConnectionStateEnum
     NoCredentialsLocated = 2,
     ConnectionError = 3
 }
-

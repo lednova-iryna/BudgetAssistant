@@ -1,4 +1,5 @@
 ﻿namespace Assistants.Budget.BE.Domain;
+
 public class Transaction
 {
     public Guid Id { get; set; }
@@ -8,4 +9,3 @@ public class Transaction
     public string? Note { get; set; }
     public TransactionType Type { get; set; }
 }
-

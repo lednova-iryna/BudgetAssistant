@@ -1,14 +1,11 @@
-﻿using System;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using Assistants.Budget.BE.Domain;
-using Microsoft.AspNetCore.WebUtilities;
-using Newtonsoft.Json;
-using Assistants.Budget.BE.API.Tests.Helpers;
 using Assistants.Budget.BE.API.Models;
+using Assistants.Budget.BE.API.Tests.Helpers;
+using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
+using Assistants.Budget.BE.Domain;
 
-namespace Assistants.Budget.BE.API.Tests;
+namespace Assistants.Budget.BE.API.Tests.Transactions;
 
 public partial class TransactionsController
 {
@@ -48,22 +45,97 @@ public partial class TransactionsController
     [Fact]
     public async Task GetTransactionsValidQueryAsync()
     {
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(1), Type = TransactionType.Income, Note = "GetTransactionsValidQueryAsync" });
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(2), Type = TransactionType.Income, Note = "GetTransactionsValidQueryAsync" });
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(3), Type = TransactionType.Income, Note = "GetTransactionsValidQueryAsync" });
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(4), Type = TransactionType.Income, Note = "GetTransactionsValidQueryAsync" });
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(1),
+                Type = TransactionType.Income,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(2),
+                Type = TransactionType.Income,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(3),
+                Type = TransactionType.Income,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(4),
+                Type = TransactionType.Income,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
 
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(1), Type = TransactionType.Expense, Note = "GetTransactionsValidQueryAsync" });
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(2), Type = TransactionType.Expense, Note = "GetTransactionsValidQueryAsync" });
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(3), Type = TransactionType.Expense, Note = "GetTransactionsValidQueryAsync" });
-        await appHttpClient.PutAsJsonAsync(rootUrl, new TransactionsCreateCommand { Amount = 10, Date = DateTime.UtcNow.AddDays(4), Type = TransactionType.Expense, Note = "GetTransactionsValidQueryAsync" });
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(1),
+                Type = TransactionType.Expense,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(2),
+                Type = TransactionType.Expense,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(3),
+                Type = TransactionType.Expense,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
+        await appHttpClient.PutAsJsonAsync(
+            rootUrl,
+            new TransactionsCreateCommand
+            {
+                Amount = 10,
+                Date = DateTime.UtcNow.AddDays(4),
+                Type = TransactionType.Expense,
+                Note = "GetTransactionsValidQueryAsync"
+            }
+        );
 
-        var query = UrlHelper.ObjectToQueryString(rootUrl, new TransactionsQuery
-        {
-            FromDate = DateTime.UtcNow,
-            ToDate = DateTime.UtcNow.AddDays(2.01),
-            Type = TransactionType.Income
-        });
+        var query = UrlHelper.ObjectToQueryString(
+            rootUrl,
+            new TransactionsQuery
+            {
+                FromDate = DateTime.UtcNow,
+                ToDate = DateTime.UtcNow.AddDays(2.01),
+                Type = TransactionType.Income
+            }
+        );
         var getResponse = await appHttpClient.GetAsync(query);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
@@ -74,12 +146,15 @@ public partial class TransactionsController
     [Fact]
     public async Task GetTransactionsNoDataAsync()
     {
-        var query = UrlHelper.ObjectToQueryString(rootUrl, new TransactionsQuery
-        {
-            FromDate = DateTime.UtcNow.AddDays(10),
-            ToDate = DateTime.UtcNow.AddDays(20),
-            Type = TransactionType.Income
-        });
+        var query = UrlHelper.ObjectToQueryString(
+            rootUrl,
+            new TransactionsQuery
+            {
+                FromDate = DateTime.UtcNow.AddDays(10),
+                ToDate = DateTime.UtcNow.AddDays(20),
+                Type = TransactionType.Income
+            }
+        );
         var getResponse = await appHttpClient.GetAsync(query);
         var responseObj = await getResponse.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
 
@@ -89,12 +164,15 @@ public partial class TransactionsController
     [Fact]
     public async Task GetTransactionsDatesValidationAsync()
     {
-        var query = UrlHelper.ObjectToQueryString(rootUrl, new TransactionsQuery
-        {
-            FromDate = DateTime.UtcNow.AddDays(10),
-            ToDate = DateTime.UtcNow,
-            Type = TransactionType.Income
-        });
+        var query = UrlHelper.ObjectToQueryString(
+            rootUrl,
+            new TransactionsQuery
+            {
+                FromDate = DateTime.UtcNow.AddDays(10),
+                ToDate = DateTime.UtcNow,
+                Type = TransactionType.Income
+            }
+        );
         var response = await appHttpClient.GetAsync(query);
         var responseObject = await response.Content.ReadFromJsonAsync<IEnumerable<ValidationErrorResponse>>();
 

@@ -1,7 +1,5 @@
-﻿using System;
-using Assistants.Budget.BE.Auth0;
+﻿using Assistants.Budget.BE.Auth0;
 using Assistants.Budget.BE.BusinessLogic.Auth.Models;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 using FluentValidation;
 using MediatR;
 
@@ -33,9 +31,12 @@ public class ClientCredentialsTokenQuery : IRequest<AuthTokens>
         public async Task<AuthTokens> Handle(ClientCredentialsTokenQuery request, CancellationToken cancellationToken)
         {
             await new Validator().ValidateAndThrowAsync(request, cancellationToken);
-            var accessToken = await auth0ManagementApiClient.GetTokenAsync(request.ClientId, request.ClientSecret, cancellationToken);
+            var accessToken = await auth0ManagementApiClient.GetTokenAsync(
+                request.ClientId,
+                request.ClientSecret,
+                cancellationToken
+            );
             return new AuthTokens(accessToken);
         }
     }
 }
-

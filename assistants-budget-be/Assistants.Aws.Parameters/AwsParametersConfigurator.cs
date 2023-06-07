@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Assistants.Aws.Parameters.Options;
 using Assistants.Extensions.Options;
 using Microsoft.Extensions.Configuration;
@@ -24,13 +23,9 @@ public static class AwsParametersConfigurator
     //    }
     //}
 
-    public static IConfigurationBuilder AddAwsParameterStore(
-        this IConfigurationBuilder configurationBuilder
-    )
+    public static IConfigurationBuilder AddAwsParameterStore(this IConfigurationBuilder configurationBuilder)
     {
-        var awsOptions = OptionsExtensions.LoadOptions<AwsOptions, AwsOptionsValidator>(
-            configurationBuilder.Build()
-        );
+        var awsOptions = OptionsExtensions.LoadOptions<AwsOptions, AwsOptionsValidator>(configurationBuilder.Build());
         if (awsOptions.Parameters?.Ignore == true || awsOptions.Parameters?.Ignore == null)
             return configurationBuilder;
 

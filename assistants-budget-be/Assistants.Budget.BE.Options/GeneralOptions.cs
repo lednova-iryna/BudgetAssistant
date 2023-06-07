@@ -1,5 +1,4 @@
-﻿using System;
-using Assistants.Extensions.Options;
+﻿using Assistants.Extensions.Options;
 using FluentValidation;
 
 namespace Assistants.Budget.BE.Options;
@@ -19,4 +18,3 @@ public class GeneralOptions : BaseOptions
         }
     }
 }
-

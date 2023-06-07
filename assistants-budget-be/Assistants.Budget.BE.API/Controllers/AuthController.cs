@@ -1,14 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Assistants.Budget.BE.API.Models;
-using Assistants.Budget.BE.BusinessLogic.Auth.CQRS;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
-using Assistants.Budget.BE.Options;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Assistants.Budget.BE.BusinessLogic.Auth.CQRS;
+using MediatR;
 
 namespace Assistants.Budget.BE.API.Controllers;
 
@@ -31,11 +23,11 @@ public class AuthController : ControllerBase
         if (Request.Headers.TryGetValue("Authorization", out var basic))
         {
             var creds = Base64Decode(basic.First().Split(" ").Last()).Split(":");
-            return Ok(await mediator.Send(new ClientCredentialsTokenQuery
-            {
-                ClientId = creds.First(),
-                ClientSecret = creds.Last()
-            }));
+            return Ok(
+                await mediator.Send(
+                    new ClientCredentialsTokenQuery { ClientId = creds.First(), ClientSecret = creds.Last() }
+                )
+            );
         }
         return BadRequest("Authorization header is required");
     }

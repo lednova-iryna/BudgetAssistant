@@ -1,7 +1,6 @@
-﻿using System;
-using MediatR;
-using Assistants.Budget.BE.Domain;
+﻿using Assistants.Budget.BE.Domain;
 using FluentValidation;
+using MediatR;
 
 namespace Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
 
@@ -17,7 +16,10 @@ public class TransactionsQuery : IRequest<IEnumerable<Transaction>>
         {
             RuleFor(x => x.FromDate).NotEmpty().NotNull();
             RuleFor(x => x.ToDate).NotEmpty().NotNull();
-            RuleFor(x => x).Must(x => x.ToDate > x.FromDate).OverridePropertyName("ToDate").WithMessage("ToDate must be great than FromDate");
+            RuleFor(x => x)
+                .Must(x => x.ToDate > x.FromDate)
+                .OverridePropertyName("ToDate")
+                .WithMessage("ToDate must be great than FromDate");
         }
     }
 
@@ -31,8 +33,8 @@ public class TransactionsQuery : IRequest<IEnumerable<Transaction>>
         }
 
         public async Task<IEnumerable<Transaction>> Handle(
-             TransactionsQuery request,
-             CancellationToken cancellationToken
+            TransactionsQuery request,
+            CancellationToken cancellationToken
         )
         {
             new Validator().ValidateAndThrow(request);
@@ -40,4 +42,3 @@ public class TransactionsQuery : IRequest<IEnumerable<Transaction>>
         }
     }
 }
-

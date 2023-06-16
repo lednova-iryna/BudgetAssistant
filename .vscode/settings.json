@@ -1,4 +1,23 @@
 {
     "editor.formatOnSave": true,
-    "editor.formatOnPaste": true
+    "editor.formatOnPaste": true,
+    "formatFiles.excludedFolders": [
+        "node_modules",
+        ".vscode",
+        ".git",
+        "dist",
+        ".chrome",
+        ".dll",
+        "obj",
+        "bin",
+        ".vs"
+    ],
+    "commandOnAllFiles.commands": {
+        "Format Usings": {
+            "command": "csharpFormatUsings.formatUsings",
+            "includeFileExtensions": [
+                ".cs"
+            ]
+        }
+    }
 }

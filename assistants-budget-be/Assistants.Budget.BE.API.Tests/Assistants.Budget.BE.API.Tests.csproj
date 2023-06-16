@@ -21,24 +21,14 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
+    <PackageReference Include="Moq" Version="4.18.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Assistants.Budget.BE.API\Assistants.Budget.BE.API.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Transactions\" />
-    <None Remove="Helpers\" />
-    <None Remove="Mocks\" />
   </ItemGroup>
   <ItemGroup>
     <None Update=".env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transactions\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Mocks\" />
   </ItemGroup>
 </Project>

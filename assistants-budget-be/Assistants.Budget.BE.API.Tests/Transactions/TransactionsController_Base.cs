@@ -1,14 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Assistants.Budget.BE.API.Tests.Mocks;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
-using Assistants.Budget.BE.Domain;
-using Assistants.Budget.BE.Options;
+using Assistants.Budget.BE.Modules.Database.Options;
+using Assistants.Budget.BE.Modules.Auth.Models;
+using Assistants.Budget.BE.Modules.Transactions.CQRS;
+using Assistants.Budget.BE.Modules.Transactions.Domain;
+using Assistants.Libs.AspNetCore.Auth.Permissions;
 using MongoDB.Driver;
 
 namespace Assistants.Budget.BE.API.Tests.Transactions;
 
-[Collection("TransactionsApi")]
+[Collection("APITests")]
 public partial class TransactionsController : IClassFixture<WebAppFactoryMock<Program>>, IDisposable
 {
     private readonly WebAppFactoryMock<Program> appFactory;
@@ -30,8 +35,18 @@ public partial class TransactionsController : IClassFixture<WebAppFactoryMock<Pr
         mongoClient.DropDatabase(databaseOptions.Name);
 
         // Setup default AccessToken into requests
-        var accessToken = AuthModuleMock.GenerateJwtToken();
-        appHttpClient.DefaultRequestHeaders.Authorization = new(JwtBearerHandlerMock.TestSchema, accessToken);
+        var accessToken = AuthModuleMock.GenerateJwtToken(
+            new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, "Test User Transactions"),
+                new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.TransactionCanCreate),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.TransactionCanDelete),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.TransactionCanEdit),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.TransactionCanRead)
+            }
+        );
+        appHttpClient.DefaultRequestHeaders.Authorization = new(JwtBearerDefaults.AuthenticationScheme, accessToken);
     }
 
     public static IEnumerable<object[]> validCreateTransactionCommandSet = new List<TransactionsCreateCommand[]>

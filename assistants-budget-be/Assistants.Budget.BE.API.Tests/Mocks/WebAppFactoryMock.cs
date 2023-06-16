@@ -17,6 +17,6 @@ public class WebAppFactoryMock<TProgram> : WebApplicationFactory<TProgram>
         {
             DotEnv.Load(new DotEnvOptions(envFilePaths: new List<string> { "./.env" }));
         });
-        builder.AddAuth0ModuleMock();
+        builder.AddAuthModuleMock();
     }
 }

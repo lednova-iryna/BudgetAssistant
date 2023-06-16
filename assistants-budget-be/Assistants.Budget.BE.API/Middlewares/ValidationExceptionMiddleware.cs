@@ -6,20 +6,20 @@ namespace Assistants.Budget.BE.API.Middlewares;
 
 public class ValidationExceptionMiddleware
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger _logger;
+    private readonly RequestDelegate next;
+    private readonly ILogger logger;
 
     public ValidationExceptionMiddleware(RequestDelegate next, ILogger<ValidationExceptionMiddleware> logger)
     {
-        _logger = logger;
-        _next = next;
+        this.logger = logger;
+        this.next = next;
     }
 
     public async Task InvokeAsync(HttpContext httpContext)
     {
         try
         {
-            await _next(httpContext);
+            await next(httpContext);
         }
         catch (ValidationException ex)
         {
@@ -29,18 +29,12 @@ public class ValidationExceptionMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, ValidationException exception)
     {
+        logger.LogError(exception, "Validation exception");
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         await context.Response.WriteAsJsonAsync(
             exception.Errors.Select(
-                x =>
-                    new ValidationErrorResponse
-                    {
-                        ErrorMessage = x.ErrorMessage,
-                        PropertyName = x.PropertyName,
-                        Severity = (int)x.Severity,
-                        PropertyValue = x.AttemptedValue
-                    }
+                x => new ValidationErrorResponse(x.PropertyName, x.AttemptedValue, x.ErrorMessage, (int)x.Severity)
             )
         );
     }

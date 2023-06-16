@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Assistants.Budget.BE.BusinessLogic.Auth.CQRS;
+using Assistants.Budget.BE.Modules.Auth.CQRS;
 using MediatR;
 
 namespace Assistants.Budget.BE.API.Controllers;
@@ -22,12 +22,16 @@ public class AuthController : ControllerBase
     {
         if (Request.Headers.TryGetValue("Authorization", out var basic))
         {
-            var creds = Base64Decode(basic.First().Split(" ").Last()).Split(":");
-            return Ok(
-                await mediator.Send(
-                    new ClientCredentialsTokenQuery { ClientId = creds.First(), ClientSecret = creds.Last() }
-                )
-            );
+            var headerValue = basic.First();
+            if (headerValue != null)
+            {
+                var creds = Base64Decode(headerValue.Split(" ").Last()).Split(":");
+                return Ok(
+                    await mediator.Send(
+                        new ClientCredentialsTokenQuery { ClientId = creds.First(), ClientSecret = creds.Last() }
+                    )
+                );
+            }
         }
         return BadRequest("Authorization header is required");
     }

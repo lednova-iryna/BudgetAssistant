@@ -1,0 +1,15 @@
+{
+  "name": "assistants-budget-auth0",
+  "version": "1.0.0",
+  "description": "Auth0 Deployment CLI integration for programatically synk of configurations",
+  "main": "index.js",
+  "scripts": {
+    "export": "a0deploy export --format=yaml -c=config.json --output_folder=local",
+    "import": "a0deploy import -c=config.json --input_file=local/tenant.yaml"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "auth0-deploy-cli": "^7.17.5"
+  }
+}

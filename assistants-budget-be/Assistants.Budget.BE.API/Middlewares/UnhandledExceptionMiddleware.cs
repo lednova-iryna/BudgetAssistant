@@ -2,23 +2,24 @@
 
 public class UnhandledExceptionMiddleware
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger _logger;
+    private readonly RequestDelegate next;
+    private readonly ILogger logger;
 
     public UnhandledExceptionMiddleware(RequestDelegate next, ILogger<ValidationExceptionMiddleware> logger)
     {
-        _logger = logger;
-        _next = next;
+        this.logger = logger;
+        this.next = next;
     }
 
     public async Task InvokeAsync(HttpContext httpContext)
     {
         try
         {
-            await _next(httpContext);
+            await next(httpContext);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
+            logger.LogError(exception, "Unhandled exception");
             throw;
         }
     }

@@ -5,7 +5,7 @@ using Assistants.Extensions.Options;
 
 namespace Assistants.Budget.BE.API.Configurators;
 
-public static class SwaggerConfigurator
+static class SwaggerConfigurator
 {
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration)
     {
@@ -51,6 +51,7 @@ public static class SwaggerConfigurator
                     Description = "API"
                 }
             );
+
             //options.IncludeXmlComments(
             //    Path.Combine(
             //        AppContext.BaseDirectory,

@@ -15,22 +15,25 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
     <PackageReference Include="dotenv.net" Version="3.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assistants.Budget.BE.BusinessLogic\Assistants.Budget.BE.BusinessLogic.csproj">
+    <None Update=".env">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Assistants.Budget.BE.Modules.Auth\Assistants.Budget.BE.Modules.Auth.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Assistants.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj">
+    <ProjectReference Include="..\Assistants.Budget.BE.Modules.Transactions\Assistants.Budget.BE.Modules.Transactions.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Assistants.Budget.BE.Options\Assistants.Budget.BE.Options.csproj">
+    <ProjectReference Include="..\Assistants.Libs.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Assistants.Budget.BE.MongoDB\Assistants.Budget.BE.MongoDB.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-    <ProjectReference Include="..\Assistants.Budget.BE.Auth0\Assistants.Budget.BE.Auth0.csproj">
+    <ProjectReference Include="..\Assistants.Libs.AspNetCore.Auth\Assistants.Libs.AspNetCore.Auth.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

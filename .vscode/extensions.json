@@ -4,6 +4,7 @@
         "github.vscode-github-actions",
         "eamodio.gitlens",
         "hashicorp.terraform",
-        "yzhang.markdown-all-in-one"
+        "yzhang.markdown-all-in-one",
+        "jbockle.jbockle-format-files"
     ]
 }

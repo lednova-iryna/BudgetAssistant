@@ -2,19 +2,22 @@
 using System.Net.Http.Json;
 using Assistants.Budget.BE.API.Models;
 using Assistants.Budget.BE.API.Tests.Helpers;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
-using Assistants.Budget.BE.Domain;
+using Assistants.Budget.BE.Modules.Transactions.CQRS;
+using Assistants.Budget.BE.Modules.Transactions.Domain;
 
 namespace Assistants.Budget.BE.API.Tests.Transactions;
 
 public partial class TransactionsController
 {
-    [Theory]
+    [Theory(DisplayName = "Get Transaction By Id")]
     [MemberData(nameof(validCreateTransactionCommandSet))]
-    public async Task GetTransactionAsync(TransactionsCreateCommand command)
+    public async Task GetTransaction(TransactionsCreateCommand command)
     {
         var createResponse = await appHttpClient.PutAsJsonAsync(rootUrl, command);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
+
+        var resstr = await createResponse.Content.ReadAsStringAsync();
+
         var createResponseObject = await createResponse.Content.ReadFromJsonAsync<Transaction>();
         var getResponse = await appHttpClient.GetFromJsonAsync<Transaction>($"{rootUrl}/{createResponseObject!.Id}");
 
@@ -25,15 +28,15 @@ public partial class TransactionsController
         Assert.Equal(createResponseObject.Note, getResponse.Note);
     }
 
-    [Fact]
-    public async Task GetTransactionInvalidIdAsync()
+    [Fact(DisplayName = "Get Transaction with invalid GUID type")]
+    public async Task GetTransactionInvalidId()
     {
         var getResponse = await appHttpClient.GetAsync($"{rootUrl}/wrong-guid");
         Assert.Equal(HttpStatusCode.BadRequest, getResponse.StatusCode);
     }
 
-    [Fact]
-    public async Task GetTransactionRandomIdAsync()
+    [Fact(DisplayName = "Get Transaction with random Id")]
+    public async Task GetTransactionRandomId()
     {
         var getResponse = await appHttpClient.GetAsync($"{rootUrl}/{Guid.NewGuid()}");
         Assert.Equal(HttpStatusCode.NoContent, getResponse.StatusCode);
@@ -42,8 +45,8 @@ public partial class TransactionsController
         Assert.Empty(createResponseObject);
     }
 
-    [Fact]
-    public async Task GetTransactionsValidQueryAsync()
+    [Fact(DisplayName = "Get Transactions by query")]
+    public async Task GetTransactionsValidQuery()
     {
         await appHttpClient.PutAsJsonAsync(
             rootUrl,
@@ -143,8 +146,8 @@ public partial class TransactionsController
         Assert.Equal(2, transations?.Count());
     }
 
-    [Fact]
-    public async Task GetTransactionsNoDataAsync()
+    [Fact(DisplayName = "Get Transactions from empty collection")]
+    public async Task GetTransactionsNoData()
     {
         var query = UrlHelper.ObjectToQueryString(
             rootUrl,
@@ -161,8 +164,8 @@ public partial class TransactionsController
         Assert.Empty(responseObj!);
     }
 
-    [Fact]
-    public async Task GetTransactionsDatesValidationAsync()
+    [Fact(DisplayName = "Get Transactions by invalid dates range")]
+    public async Task GetTransactionsDatesValidation()
     {
         var query = UrlHelper.ObjectToQueryString(
             rootUrl,

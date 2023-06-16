@@ -5,25 +5,27 @@ VisualStudioVersion = 25.0.1705.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.API", "Assistants.Budget.BE.API\Assistants.Budget.BE.API.csproj", "{7CF84F16-6B61-4E21-B6A8-4F13AD997670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.BusinessLogic", "Assistants.Budget.BE.BusinessLogic\Assistants.Budget.BE.BusinessLogic.csproj", "{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Domain", "Assistants.Budget.BE.Domain\Assistants.Budget.BE.Domain.csproj", "{EF90A4E6-62F1-4FA7-8809-0C4042640B3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Modules.Transactions", "Assistants.Budget.BE.Modules.Transactions\Assistants.Budget.BE.Modules.Transactions.csproj", "{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Extensions.Options", "Assistants.Extensions.Options\Assistants.Extensions.Options.csproj", "{A4ADF764-DBF7-452E-AA0E-E377451FB0FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Libs.Aws.Parameters", "Assistants.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj", "{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Libs.Aws.Parameters", "Assistants.Libs.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj", "{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{A279D73D-DD2D-4EB4-8820-9B4AC7417268}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Options", "Assistants.Budget.BE.Options\Assistants.Budget.BE.Options.csproj", "{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Modules.Auth", "Assistants.Budget.BE.Modules.Auth\Assistants.Budget.BE.Modules.Auth.csproj", "{4EA67619-1EB8-46B1-BD27-4956E37EE80D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Auth0", "Assistants.Budget.BE.Auth0\Assistants.Budget.BE.Auth0.csproj", "{4EA67619-1EB8-46B1-BD27-4956E37EE80D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.MongoDB", "Assistants.Budget.BE.MongoDB\Assistants.Budget.BE.MongoDB.csproj", "{4F32EFB5-5211-45F0-BE75-11267BF59516}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Modules.Database", "Assistants.Budget.BE.Modules.Database\Assistants.Budget.BE.Modules.Database.csproj", "{4F32EFB5-5211-45F0-BE75-11267BF59516}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{56CF4B5C-2AB5-4454-BF4F-1161E92D82B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.API.Tests", "Assistants.Budget.BE.API.Tests\Assistants.Budget.BE.API.Tests.csproj", "{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Budget.BE.Modules.Core", "Assistants.Budget.BE.Modules.Core\Assistants.Budget.BE.Modules.Core.csproj", "{9672F962-52AC-4193-BDFD-13020FB6B35C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{7DAFD533-A912-4625-A616-7B54C93D6A0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Libs.AspNetCore.Auth", "Assistants.Libs.AspNetCore.Auth\Assistants.Libs.AspNetCore.Auth.csproj", "{9798E409-BA54-43C3-A592-3F4D0CEA8055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +41,6 @@ Global
 		{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF90A4E6-62F1-4FA7-8809-0C4042640B3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF90A4E6-62F1-4FA7-8809-0C4042640B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF90A4E6-62F1-4FA7-8809-0C4042640B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF90A4E6-62F1-4FA7-8809-0C4042640B3E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0F954E1-1FD6-4ED0-8399-DB2870CF0508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0F954E1-1FD6-4ED0-8399-DB2870CF0508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0F954E1-1FD6-4ED0-8399-DB2870CF0508}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,10 +57,6 @@ Global
 		{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D728C2EF-E2A0-44C2-89EA-572FFD2C476F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EA67619-1EB8-46B1-BD27-4956E37EE80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +69,14 @@ Global
 		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9672F962-52AC-4193-BDFD-13020FB6B35C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9672F962-52AC-4193-BDFD-13020FB6B35C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9672F962-52AC-4193-BDFD-13020FB6B35C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9672F962-52AC-4193-BDFD-13020FB6B35C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +88,10 @@ Global
 		{F60CFF17-C9F2-488B-9D0B-3BDF6F3B4EDF} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
 		{A4ADF764-DBF7-452E-AA0E-E377451FB0FE} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
 		{7D175FC4-993D-4ED5-AE85-1562B3B9FA67} = {56CF4B5C-2AB5-4454-BF4F-1161E92D82B8}
+		{4EA67619-1EB8-46B1-BD27-4956E37EE80D} = {7DAFD533-A912-4625-A616-7B54C93D6A0E}
+		{9672F962-52AC-4193-BDFD-13020FB6B35C} = {7DAFD533-A912-4625-A616-7B54C93D6A0E}
+		{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B} = {7DAFD533-A912-4625-A616-7B54C93D6A0E}
+		{9798E409-BA54-43C3-A592-3F4D0CEA8055} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
+		{4F32EFB5-5211-45F0-BE75-11267BF59516} = {7DAFD533-A912-4625-A616-7B54C93D6A0E}
 	EndGlobalSection
 EndGlobal

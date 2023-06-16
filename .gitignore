@@ -7,5 +7,7 @@
 **/sonar
 **/postgresql
 **/*.tfvars
+**/node_modules
 
 !/assistants-budget-be/Assistants.Budget.BE.API.Tests/.env
+/assistants-budget-auth0/config.json

@@ -1,9 +1,3 @@
 ﻿namespace Assistants.Budget.BE.API.Models;
 
-public class ValidationErrorResponse
-{
-    public string PropertyName { get; set; } = string.Empty;
-    public object? PropertyValue { get; set; }
-    public string ErrorMessage { get; set; } = string.Empty;
-    public int Severity { get; set; }
-}
+public record ValidationErrorResponse(string PropertyName, object? PropertyValue, string ErrorMessage, int Severity);

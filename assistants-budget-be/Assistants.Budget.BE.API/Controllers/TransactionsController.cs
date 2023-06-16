@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Assistants.Budget.BE.API.Models;
-using Assistants.Budget.BE.BusinessLogic.Transactions.CQRS;
-using Assistants.Budget.BE.Domain;
-using Assistants.Budget.BE.Options;
+using Assistants.Budget.BE.Modules.Transactions.CQRS;
+using Assistants.Budget.BE.Modules.Transactions.Domain;
 using MediatR;
 
 namespace Assistants.Budget.BE.API.Controllers;
@@ -16,17 +14,11 @@ public class TransactionsController : ControllerBase
 {
     private readonly ILogger<TransactionsController> logger;
     private readonly IMediator mediator;
-    private readonly DatabaseOptions databaseOptions;
 
-    public TransactionsController(
-        ILogger<TransactionsController> logger,
-        IMediator mediator,
-        IOptions<DatabaseOptions> databaseOptions
-    )
+    public TransactionsController(ILogger<TransactionsController> logger, IMediator mediator)
     {
         this.logger = logger;
         this.mediator = mediator;
-        this.databaseOptions = databaseOptions.Value;
     }
 
     [HttpGet]

@@ -1,16 +1,21 @@
-﻿using Assistants.Aws.Parameters.Options;
-using Assistants.Budget.BE.API.Configurators;
-using Assistants.Budget.BE.BusinessLogic;
-using Assistants.Extensions.Options;
-using Assistants.Libs.Aws.Parameters;
-using Microsoft.Extensions.Configuration;
-using Amazon.Extensions.NETCore.Setup;
-using dotenv.net;
-using Assistants.Budget.BE.Options;
-using Assistants.Aws.Parameters.Constants;
-using Assistants.Budget.BE.MongoDB;
+﻿using Assistants.Budget.BE.API.Configurators;
 using Assistants.Budget.BE.API.Middlewares;
-using Assistants.Budget.BE.Auth0;
+using Assistants.Budget.BE.API.Services;
+using Assistants.Budget.BE.Modules.Auth;
+using Assistants.Budget.BE.Modules.Database;
+using Assistants.Budget.BE.Options;
+using Assistants.Extensions.Options;
+
+using dotenv.net;
+using Newtonsoft.Json.Converters;
+using Microsoft.AspNetCore.Authorization;
+using Assistants.Libs.Aws.Parameters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using Assistants.Budget.BE.Modules.Core;
+using Assistants.Budget.BE.Modules.Transactions;
+using Assistants.Libs.Aws.Parameters.Constants;
+using Assistants.Budget.BE.Modules.Database.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,20 +28,32 @@ builder.WebHost.ConfigureAppConfiguration(c =>
 
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0
 builder.Services.AddProblemDetails();
-
 builder.Services.AddMemoryCache();
 
 // Add services to the container.
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
-builder.Services.AddAuth0Module(builder.Configuration);
-builder.Services.AddAuthorization();
-builder.Services.AddControllers();
-builder.Services.AddBusinessLogic();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDatabase(builder.Configuration);
 
-var databaseOptions = OptionsExtensions.LoadOptions<DatabaseOptions, DatabaseOptions.Validator>(builder.Configuration, builder.Services);
-var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOptions.Validator>(builder.Configuration, builder.Services);
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddTransactionsModule();
+builder.Services.AddScoped<IRequestIdentityService, RequestIdentityService>();
+builder.Services.AddAuth(builder.Configuration);
+
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.Converters.Add(new StringEnumConverter());
+    });
+builder.Services.AddEndpointsApiExplorer();
+
+var databaseOptions = OptionsExtensions.LoadOptions<DatabaseOptions, DatabaseOptions.Validator>(
+    builder.Configuration,
+    builder.Services
+);
+var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOptions.Validator>(
+    builder.Configuration,
+    builder.Services
+);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwagger(builder.Configuration);
@@ -52,7 +69,6 @@ app.UseSwagger(generalOptions.IsSwaggerEnabled);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 
 app.MapGet(
     "/",
@@ -72,5 +88,4 @@ app.MapGet(
 app.Run();
 
 // Partial Program class needed for tests.
-public partial class Program
-{ }
+public partial class Program { }

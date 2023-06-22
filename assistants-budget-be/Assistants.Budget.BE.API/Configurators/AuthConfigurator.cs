@@ -14,7 +14,7 @@ static class AuthConfigurator
     {
         var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOptions.Validator>(configuration);
 
-        services.AddAuthModule(configuration, generalOptions.Evnironment == "test");
+        services.AddAuthModule(configuration, generalOptions.Environment == "test");
         services.AddSingleton<IAuthorizationMiddlewareResultHandler, AuthMiddlewareResultHandler>();
         services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
         services.AddAuthorization(options =>

@@ -7,14 +7,14 @@ public class GeneralOptions : BaseOptions
 {
     public override string SectionName => "General";
 
-    public string Evnironment { get; set; }
+    public string Environment { get; set; }
     public bool IsSwaggerEnabled { get; set; } = false;
 
     public class Validator : AbstractValidator<GeneralOptions>
     {
         public Validator()
         {
-            RuleFor(x => x.Evnironment).NotEmpty();
+            RuleFor(x => x.Environment).NotEmpty();
         }
     }
 }

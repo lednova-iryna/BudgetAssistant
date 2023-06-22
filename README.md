@@ -1,6 +1,21 @@
 # Assistants: Budget
 
-The Assistants: Budget is a project designed to help individuals and families track their incomes and expenses, calculate relevant statistics, and provide insightful infographics for effective financial management. With the goal of promoting better financial health and planning, this budget assistant offers a comprehensive set of features to simplify the process of tracking and analyzing finances.
+The Assistants: Budget is a project designed to help individuals and families track their incomes and expenses, calculate relevant statistics, and provide insightful infographic for effective financial management. With the goal of promoting better financial health and planning, this budget assistant offers a comprehensive set of features to simplify the process of tracking and analyzing finances.
+
+- [Assistants: Budget](#assistants-budget)
+- [Architecture](#architecture)
+- [Git Flow](#git-flow)
+- [Ops](#ops)
+  - [GitHub Variables](#github-variables)
+  - [Budget BE API Variables](#budget-be-api-variables)
+    - [Setup AWS Parameter Store](#setup-aws-parameter-store)
+    - [Setup locally](#setup-locally)
+  - [Initial brand-new setup](#initial-brand-new-setup)
+  - [Setup new env](#setup-new-env)
+- [BudgetAssistantUI](#budgetassistantui)
+- [Backend configuration](#backend-configuration)
+- [Auth0 Configuration](#auth0-configuration)
+
 
 # Architecture
 
@@ -29,6 +44,84 @@ The Assistants: Budget is a project designed to help individuals and families tr
 | AWS_BE_API_DOMAIN                         | Github  | SECRET | Environment | Assistant: Budget - BE | Full domain name for Budget.API project                     |
 | AWS_LAMBDA_NAME_BE_API                    | Github  | SECRET | Environment | Assistant: Budget - BE | Name of Lambda function which should run Budget.API project |
 
+## Budget BE API Variables
+| Variable Name                          | Storage         | Type   | Level       | Project                | Description |
+| -------------------------------------- | --------------- | ------ | ----------- | ---------------------- | ----------- |
+| Auth__Authority                        | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__Audience                         | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__OAuth2TokenUrl                   | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__ClientId                         | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__ClientSecret                     | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| General__Environment                   | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| General__IsSwaggerEnabled              | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Database__ConnectionString             | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Database__Name                         | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__ManagementApiClientId            | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__ManagementApiAudience            | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+| Auth__ManagementApiClientSecret        | Parameter Store | SECRET | Environment | Assistant: Budget - BE |             |
+|                                        |                 |        | Environment | Assistant: Budget - BE |             |
+| Aws__Parameters__Ignore                | Terraform. Env  | PARAM  | Environment | Assistant: Budget - BE |             |
+| Aws__Parameters__Names                 | Terraform. Env  | PARAM  | Environment | Assistant: Budget - BE |             |
+| Aws__Parameters__SecretPollingInterval | Terraform. Env  | PARAM  | Environment | Assistant: Budget - BE |             |
+| AWS_PROFILE=lednova                    | .env            | PARAM  | Local       | Assistant: Budget - BE |             |
+
+### Setup AWS Parameter Store
+Let review how AWS Parameter Store item can be used in application, with help of [Assistants.Libs.Aws.Parameters](./assistants-budget-be/Assistants.Libs.Aws.Parameters/) library, on a example.
+For instance, project requires to use `Auth__Authority`. Need to perform the following steps:
+1. Define project name which should be deployed. Let's assume it is `assistants-budget-be-api`;
+2. Define environment project should be deployed to. Let's assume it is `develop`;
+3. In this case into project variables, usually thought the Environment variable, need to setup `Aws__Parameters__Names` with value `/develop/assistants-budget-be-api/`;
+4. Create `/develop/assistants-budget-be-api/auth` Parameter in AWS Parameter Store with a following example of content:
+   ``` json
+   {
+      "OAuth2TokenUrl": "oauth/token",
+      "Audience": "{AUTH_AUDIENCE}",
+      "Authority": "{AUTH_AUTHORITY}",
+      "ManagementApiAudience": "AUTH0_MANAGEMENT_AUDIENCE",
+      "ManagementApiClientId": "AUTH0_MANAGEMENT_CLIENT_ID",
+      "ManagementApiClientSecret": "AUTH0_MANAGEMENT_CLIENT_SECRET"
+   }
+   ```
+5. With help of [Assistants.Libs.Aws.Parameters](./assistants-budget-be/Assistants.Libs.Aws.Parameters/) library, such Parameter will be loaded into ServiceCollection as IOption and parsed into a following structure:
+   ``` c#
+      class AuthOptions : BaseOptions
+      {
+         public override string SectionName => "Auth";
+
+         public string Audience { get; set; }
+         public string Authority { get; set; }
+         public string OAuth2TokenUrl { get; set; }
+         public string ManagementApiAudience { get; set; }
+         public string ManagementApiClientId { get; set; }
+         public string ManagementApiClientSecret { get; set; }
+      }
+   ```
+
+### Setup locally
+For local setup all project variables can be setup into `.env` file. The following example can be used
+``` env
+Aws__Parameters__Ignore=true
+
+DATABASE_USERNAME=username
+DATABASE_PASSWORD=password
+
+General__Environment=test
+
+Database__ConnectionString=mongodb://username:password@localhost:27017
+Database__Name=integration_tests
+
+Auth__OAuth2TokenUrl=Auth__OAuth2TokenUrl
+Auth__Authority=https://Auth__Domain
+Auth__Audience=Auth__Audience
+Auth__ClientId=Auth__ClientId
+Auth__ClientSecret=Auth__ClientSecret
+Auth__TestClientId=Auth__ClientId
+Auth__TestClientSecret=Auth__ClientSecret
+Auth__ManagementApiAudience=Auth__Audience
+Auth__ManagementApiClientId=Auth__ClientId
+Auth__ManagementApiClientSecret=Auth__ClientSecret
+```
+
 ## Initial brand-new setup
 As an initial setup for a fresh environment, before executing Terraform scripts need to perform a few manual actions:
 
@@ -48,12 +141,6 @@ As an initial setup for a fresh environment, before executing Terraform scripts 
    
 TODO:
 - Describe: Create ECR (using terraform, comment everything else), builde and deploy BE with actions to ECR, run all other terraforms.
-
-## Add new Parameter into AWS
-Budget.API project utilize AWS Parameter Store for storing application configurations. All configurations of backend projects should be 2 level maximum.
-
-
-- Describe: how to add new Parameter into AWS
 
 # BudgetAssistantUI
 

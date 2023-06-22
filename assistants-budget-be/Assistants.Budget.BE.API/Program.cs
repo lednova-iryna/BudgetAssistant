@@ -54,7 +54,7 @@ var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOption
 builder.Services.AddMongoDistributedCache(x =>
 {
     x.ConnectionString = databaseOptions.ConnectionString;
-    x.DatabaseName = "MongoCache";
+    x.DatabaseName = databaseOptions.Name;
     x.CollectionName = "appcache";
     x.ExpiredScanInterval = TimeSpan.FromDays(1);
 });

@@ -12,12 +12,10 @@ namespace Assistants.Budget.BE.API.Controllers;
 [Route("transactions")]
 public class TransactionsController : ControllerBase
 {
-    private readonly ILogger<TransactionsController> logger;
     private readonly IMediator mediator;
 
-    public TransactionsController(ILogger<TransactionsController> logger, IMediator mediator)
+    public TransactionsController(IMediator mediator)
     {
-        this.logger = logger;
         this.mediator = mediator;
     }
 

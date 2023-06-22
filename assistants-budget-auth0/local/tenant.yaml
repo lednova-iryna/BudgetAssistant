@@ -6,6 +6,7 @@ resourceServers:
   - name: Budget Assistant
     identifier: https://develop.budget.lednova.io
     allow_offline_access: false
+    enforce_policies: true
     scopes:
       - value: read:client_grants
         description: Read Client Grants
@@ -15,7 +16,6 @@ resourceServers:
         description: Delete Client Grants
       - value: update:client_grants
         description: Update Client Grants
-
       - value: transaction:create
         description: Create Transactions
       - value: transaction:read
@@ -24,7 +24,6 @@ resourceServers:
         description: Delete Transactions
       - value: transaction:edit
         description: Edit Transactions
-
       - value: role:create
         description: Create Identity Role
       - value: role:edit
@@ -33,8 +32,17 @@ resourceServers:
         description: Read Identity Role
       - value: role:delete
         description: Delete Identity Role
+      - value: user:create
+        description: Create User
+      - value: user:edit
+        description: Edit Uset
+      - value: user:read
+        description: Read User
+      - value: user:delete
+        description: Delete User
     signing_alg: RS256
     skip_consent_for_verifiable_first_party_clients: true
+    token_dialect: access_token_authz
     token_lifetime: 86400
     token_lifetime_for_web: 7200
 clients:
@@ -149,9 +157,33 @@ databases:
       mfa:
         active: true
         return_enroll_settings: true
+      validation:
+        username:
+          max: 50
+          min: 1
+      import_mode: false
+      customScripts:
+        change_password: ./databases/Username-Password-Authentication/change_password.js
+        create: ./databases/Username-Password-Authentication/create.js
+        delete: ./databases/Username-Password-Authentication/delete.js
+        get_user: ./databases/Username-Password-Authentication/get_user.js
+        login: ./databases/Username-Password-Authentication/login.js
+        verify: ./databases/Username-Password-Authentication/verify.js
       passwordPolicy: good
+      password_history:
+        size: 5
+        enable: false
       strategy_version: 2
+      requires_username: true
+      password_dictionary:
+        enable: false
+        dictionary: []
       brute_force_protection: true
+      password_no_personal_info:
+        enable: false
+      password_complexity_options:
+        min_length: 8
+      enabledDatabaseCustomization: false
     realms:
       - Username-Password-Authentication
 connections:
@@ -174,7 +206,7 @@ tenant:
   flags:
     revoke_refresh_token_grant: false
     disable_clickjack_protection_headers: false
-  sandbox_version: "16"
+  sandbox_version: '16'
 emailProvider: {}
 emailTemplates: []
 clientGrants:
@@ -185,6 +217,14 @@ clientGrants:
       - create:client_grants
       - delete:client_grants
       - update:client_grants
+      - transaction:create
+      - transaction:read
+      - transaction:delete
+      - transaction:edit
+      - role:create
+      - role:edit
+      - role:read
+      - role:delete
 guardianFactors:
   - name: duo
     enabled: false
@@ -213,7 +253,39 @@ guardianPhoneFactorMessageTypes:
 roles:
   - name: SuperAdmin
     description: Application super admins
-    permissions: []
+    permissions:
+      - permission_name: create:client_grants
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: delete:client_grants
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: read:client_grants
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: role:create
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: role:delete
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: role:edit
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: role:read
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: transaction:create
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: transaction:delete
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: transaction:edit
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: transaction:read
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: update:client_grants
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: user:create
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: user:delete
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: user:edit
+        resource_server_identifier: https://develop.budget.lednova.io
+      - permission_name: user:read
+        resource_server_identifier: https://develop.budget.lednova.io
 branding:
   templates: []
 prompts:

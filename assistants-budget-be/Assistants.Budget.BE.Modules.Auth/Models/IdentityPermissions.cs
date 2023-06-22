@@ -11,4 +11,9 @@ public static class IdentityPermissions
     public const string RoleCanEdit = "role:edit";
     public const string RoleCanRead = "role:read";
     public const string RoleCanDelete = "role:delete";
+
+    public const string UserCanCreate = "user:create";
+    public const string UserCanEdit = "user:edit";
+    public const string UserCanRead = "user:read";
+    public const string UserCanDelete = "user:delete";
 }

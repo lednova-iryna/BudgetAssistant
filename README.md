@@ -64,3 +64,4 @@ TODO: Describe usage of assistants-budget-auth0 for sync Auth0 configurations an
 TODO: possibility of setup GitHub actions for deploying Auth0
 TODO: Describe how to add new permissions and roles using assistants-budget-auth0
 TODO: describe that clientId and ClientSecret can be added into .env file, and during token generation in swagger can put any value which will be substituted with .env. Only for local dev.
+TODO: describe that all permissions should be created in Auth0 before their usage in API.

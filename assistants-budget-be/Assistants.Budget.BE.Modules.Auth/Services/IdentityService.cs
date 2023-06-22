@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Assistants.Budget.BE.Modules.Database.Options;
 using Assistants.Budget.BE.Modules.Auth.CQRS;
 using Assistants.Budget.BE.Modules.Auth.Domain;
+using Assistants.Budget.BE.Modules.Database.Options;
 using MongoDB.Driver;
 
 namespace Assistants.Budget.BE.Modules.Auth;
@@ -39,17 +39,17 @@ class IdentityService
 
     #region IdentityRole
     public async Task<IdentityRole> CreateIdentityRole(
+        string roleId,
         IdentityRoleCreateCommand request,
         Guid createdBy,
         CancellationToken cancellationToken
     )
     {
         var document = new IdentityRole(
-            Id: Guid.NewGuid(),
+            Id: roleId,
             Name: request.Name,
-            Permissions: request.Permissions,
-            CreatedBy: createdBy,
-            CreatedAt: DateTime.UtcNow
+            Description: request.Description,
+            Permissions: request.Permissions
         );
 
         await GetRolesCollection().InsertOneAsync(document, cancellationToken: cancellationToken);
@@ -57,7 +57,21 @@ class IdentityService
         return document;
     }
 
-    public async Task<IdentityRole> GetIdentityRoleById(Guid id, CancellationToken cancellationToken) =>
+    public async Task UpdateIdentityRole(
+        string roleId,
+        IdentityRoleUpdateCommand request,
+        Guid modifiedBy,
+        CancellationToken cancellationToken
+    )
+    {
+        var updateQuery = Builders<IdentityRole>.Update
+            .Set(r => r.Name, request.Name)
+            .Set(r => r.Permissions, request.Permissions);
+        await GetRolesCollection()
+            .UpdateOneAsync(x => x.Id == roleId, updateQuery, cancellationToken: cancellationToken);
+    }
+
+    public async Task<IdentityRole> GetIdentityRoleById(string id, CancellationToken cancellationToken) =>
         await GetRolesCollection().Find(x => x.Id == id).Limit(1).FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IdentityRole>> GetIdentityRoles(
@@ -69,17 +83,18 @@ class IdentityService
 
     #region IdentityUser
 
-    public async Task<IdentityUser> GetIdentityUserById(Guid id, CancellationToken cancellationToken) =>
+    public async Task<IdentityUser> GetIdentityUserById(string id, CancellationToken cancellationToken) =>
         await GetUsersCollection().Find(x => x.Id == id).Limit(1).FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IdentityUser> CreateIdentityUser(
+        string userId,
         IdentityUserCreateCommand request,
         Guid createdBy,
         CancellationToken cancellationToken
     )
     {
         var document = new IdentityUser(
-            Id: Guid.NewGuid(),
+            Id: userId,
             UserName: request.UserName,
             Roles: request.Roles,
             Status: IdentityUserStatus.Active,
@@ -102,11 +117,11 @@ class IdentityService
 
         if (request.Roles?.Count() > 0)
         {
-            filter = filter & Builders<IdentityUser>.Filter.AnyIn(x => x.Roles, request.Roles);
+            filter &= Builders<IdentityUser>.Filter.AnyIn(x => x.Roles, request.Roles);
         }
         if (request.Status.HasValue)
         {
-            filter = filter & Builders<IdentityUser>.Filter.Eq(x => x.Status, request.Status);
+            filter &= Builders<IdentityUser>.Filter.Eq(x => x.Status, request.Status);
         }
 
         return await dbQuery.Find(filter).ToListAsync(cancellationToken);

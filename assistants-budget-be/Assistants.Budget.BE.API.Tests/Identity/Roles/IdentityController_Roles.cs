@@ -11,7 +11,10 @@ namespace Assistants.Budget.BE.API.Tests.Identity;
 
 public partial class IdentityController
 {
-    [Fact(DisplayName = "Create Valid IdentityRole With Permissions As Strings")]
+    [Fact(
+        DisplayName = "Create Valid IdentityRole With Permissions As Strings",
+        Skip = "Need to implement Auth0 Management API mocks"
+    )]
     public async Task CreateValidIdentityRoleWithPermissionsAsStrings()
     {
         var command = new IdentityRoleCreateCommand()
@@ -40,7 +43,7 @@ public partial class IdentityController
         Assert.Contains(IdentityPermissions.TransactionCanEdit, identityRole.Permissions);
     }
 
-    [Fact(DisplayName = "Get IdentityRole By Id")]
+    [Fact(DisplayName = "Get IdentityRole By Id", Skip = "Need to implement Auth0 Management API mocks")]
     public async Task GetIdentityRoleById()
     {
         var createCommand = new IdentityRoleCreateCommand()

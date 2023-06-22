@@ -5,9 +5,9 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace Assistants.Budget.BE.Modules.Auth.Domain;
 
 public record IdentityUser(
-    Guid Id,
+    string Id,
     string UserName,
-    IEnumerable<Guid> Roles,
+    IEnumerable<string> Roles,
     [property: BsonRepresentation(BsonType.String)] IdentityUserStatus Status,
     Guid CreatedBy,
     DateTime CreatedAt

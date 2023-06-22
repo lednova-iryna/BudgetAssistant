@@ -1,21 +1,17 @@
 ﻿using Assistants.Budget.BE.API.Configurators;
 using Assistants.Budget.BE.API.Middlewares;
 using Assistants.Budget.BE.API.Services;
-using Assistants.Budget.BE.Modules.Auth;
+using Assistants.Budget.BE.Modules.Core;
 using Assistants.Budget.BE.Modules.Database;
+using Assistants.Budget.BE.Modules.Database.Options;
+using Assistants.Budget.BE.Modules.Transactions;
 using Assistants.Budget.BE.Options;
 using Assistants.Extensions.Options;
-
+using Assistants.Libs.Aws.Parameters;
+using Assistants.Libs.Aws.Parameters.Constants;
+using Assistants.Libs.Caching.MongoDistributedCache;
 using dotenv.net;
 using Newtonsoft.Json.Converters;
-using Microsoft.AspNetCore.Authorization;
-using Assistants.Libs.Aws.Parameters;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Security.Claims;
-using Assistants.Budget.BE.Modules.Core;
-using Assistants.Budget.BE.Modules.Transactions;
-using Assistants.Libs.Aws.Parameters.Constants;
-using Assistants.Budget.BE.Modules.Database.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +50,14 @@ var generalOptions = OptionsExtensions.LoadOptions<GeneralOptions, GeneralOption
     builder.Configuration,
     builder.Services
 );
+
+builder.Services.AddMongoDistributedCache(x =>
+{
+    x.ConnectionString = databaseOptions.ConnectionString;
+    x.DatabaseName = "MongoCache";
+    x.CollectionName = "appcache";
+    x.ExpiredScanInterval = TimeSpan.FromDays(1);
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwagger(builder.Configuration);

@@ -37,7 +37,7 @@ public class IdentityController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(IdentityRole), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
-    public async Task<IdentityRole?> GetRoleByIdAsync(Guid id)
+    public async Task<IdentityRole?> GetRoleByIdAsync(string id)
     {
         IdentityRoleQueryOne query = new() { Id = id };
         return await mediator.Send(query);
@@ -54,6 +54,7 @@ public class IdentityController : ControllerBase
     }
 
     [HttpGet("users")]
+    [Permission(IdentityPermissions.UserCanRead)]
     [ProducesResponseType(typeof(IEnumerable<IdentityUser>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
     public async Task<IEnumerable<IdentityUser>> GetUsersAsync([FromQuery] IdentityUserQuery query)
@@ -62,16 +63,18 @@ public class IdentityController : ControllerBase
     }
 
     [HttpGet("users/{id}")]
+    [Permission(IdentityPermissions.UserCanRead)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(IdentityRole), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
-    public async Task<IdentityUser?> GetUserByIdAsync(Guid id)
+    public async Task<IdentityUser?> GetUserByIdAsync(string id)
     {
         IdentityUserQueryOne query = new() { Id = id };
         return await mediator.Send(query);
     }
 
     [HttpPut("users")]
+    [Permission(IdentityPermissions.UserCanCreate)]
     [ProducesResponseType(typeof(IdentityUser), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUserAsync([FromBody] IdentityUserCreateCommand command)

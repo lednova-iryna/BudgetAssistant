@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{7DAF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Libs.AspNetCore.Auth", "Assistants.Libs.AspNetCore.Auth\Assistants.Libs.AspNetCore.Auth.csproj", "{9798E409-BA54-43C3-A592-3F4D0CEA8055}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assistants.Libs.Caching.MongoDistributedCache", "Assistants.Libs.Caching.MongoDistributedCache\Assistants.Libs.Caching.MongoDistributedCache.csproj", "{8CB84913-810E-4E4A-8974-307018AA3C60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9798E409-BA54-43C3-A592-3F4D0CEA8055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CB84913-810E-4E4A-8974-307018AA3C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB84913-810E-4E4A-8974-307018AA3C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB84913-810E-4E4A-8974-307018AA3C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB84913-810E-4E4A-8974-307018AA3C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,5 +99,6 @@ Global
 		{B7FDB2FA-1BDE-485B-B61E-C6A4C34CE52B} = {7DAFD533-A912-4625-A616-7B54C93D6A0E}
 		{9798E409-BA54-43C3-A592-3F4D0CEA8055} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
 		{4F32EFB5-5211-45F0-BE75-11267BF59516} = {7DAFD533-A912-4625-A616-7B54C93D6A0E}
+		{8CB84913-810E-4E4A-8974-307018AA3C60} = {A279D73D-DD2D-4EB4-8820-9B4AC7417268}
 	EndGlobalSection
 EndGlobal

@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Assistants.Budget.BE.Modules.Auth.CQRS;
 
-public class IdentityRoleQueryOne : IRequest<IdentityRole>
+public class IdentityRoleQueryOne : IRequest<IdentityRole?>
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     private class Validator : AbstractValidator<IdentityRoleQueryOne>
     {
@@ -16,19 +16,23 @@ public class IdentityRoleQueryOne : IRequest<IdentityRole>
         }
     }
 
-    private class Handler : IRequestHandler<IdentityRoleQueryOne, IdentityRole>
+    private class Handler : IRequestHandler<IdentityRoleQueryOne, IdentityRole?>
     {
-        private readonly IdentityService identityService;
+        private readonly AuthService authService;
 
-        public Handler(IdentityService identityService)
+        public Handler(AuthService authService)
         {
-            this.identityService = identityService;
+            this.authService = authService;
         }
 
-        public async Task<IdentityRole> Handle(IdentityRoleQueryOne request, CancellationToken cancellationToken)
+        public async Task<IdentityRole?> Handle(IdentityRoleQueryOne request, CancellationToken cancellationToken)
         {
             await new Validator().ValidateAndThrowAsync(request, cancellationToken);
-            return await identityService.GetIdentityRoleById(request.Id, cancellationToken);
+            var role = await authService.GetRole(request.Id, cancellationToken);
+            var permissions = await authService.GetRolePermissions(request.Id, cancellationToken);
+            if (role == null)
+                return null;
+            return new IdentityRole(role.Id, role.Name, role.Description, permissions.Select(x => x.Name));
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Assistants.Budget.BE.Modules.Auth.CQRS;
 
 public class IdentityUserQuery : IRequest<IEnumerable<IdentityUser>>
 {
-    public IEnumerable<Guid>? Roles { get; set; }
+    public IEnumerable<string>? Roles { get; set; }
     public IdentityUserStatus? Status { get; set; }
 
     private class Handler : IRequestHandler<IdentityUserQuery, IEnumerable<IdentityUser>>

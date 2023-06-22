@@ -7,11 +7,11 @@ public class IdentityRoleQuery : IRequest<IEnumerable<IdentityRole>>
 {
     private class Handler : IRequestHandler<IdentityRoleQuery, IEnumerable<IdentityRole>>
     {
-        private readonly IdentityService identityService;
+        private readonly AuthService authService;
 
-        public Handler(IdentityService identityService)
+        public Handler(AuthService identityService)
         {
-            this.identityService = identityService;
+            this.authService = identityService;
         }
 
         public async Task<IEnumerable<IdentityRole>> Handle(
@@ -19,7 +19,8 @@ public class IdentityRoleQuery : IRequest<IEnumerable<IdentityRole>>
             CancellationToken cancellationToken
         )
         {
-            return await identityService.GetIdentityRoles(request, cancellationToken);
+            var authRoles = await authService.GetRoles(cancellationToken);
+            return authRoles.Select(x => new IdentityRole(x.Id, x.Name, x.Description));
         }
     }
 }

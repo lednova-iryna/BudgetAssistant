@@ -8,24 +8,15 @@ using Microsoft.Extensions.Options;
 
 namespace Assistants.Budget.BE.Modules.Auth.CQRS;
 
-public class IdentityRoleCreateCommand : IRequest<IdentityRole>
+public class IdentityRoleUpdateCommand : IRequest
 {
-    public string Id { get; set; }
+    public string RoleId { get; set; }
     public string Name { get; set; }
-    public string? Description { get; set; }
     public IEnumerable<string> Permissions { get; set; }
 
-    private class Validator : AbstractValidator<IdentityRoleCreateCommand>
-    {
-        public Validator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Permissions).NotEmpty();
-        }
-    }
+    private class Validator : AbstractValidator<IdentityRoleUpdateCommand> { }
 
-    private class Handler : IRequestHandler<IdentityRoleCreateCommand, IdentityRole>
+    private class Handler : IRequestHandler<IdentityRoleUpdateCommand>
     {
         private readonly IdentityService identityService;
         private readonly AuthService authService;
@@ -45,26 +36,29 @@ public class IdentityRoleCreateCommand : IRequest<IdentityRole>
             this.requestIdentity = requestIdentity;
         }
 
-        public async Task<IdentityRole> Handle(IdentityRoleCreateCommand request, CancellationToken cancellationToken)
+        public async Task Handle(IdentityRoleUpdateCommand request, CancellationToken cancellationToken)
         {
             await new Validator().ValidateAndThrowAsync(request, cancellationToken);
 
-            //var role = await authService.CreateRoleAsync(new RoleCreateRequest
-            //{
-            //    Name = request.Name,
-            //}, cancellationToken);
+            var role = await authService.UpdateRoleAsync(
+                request.RoleId,
+                new RoleUpdateRequest { Name = request.Name, },
+                cancellationToken
+            );
 
-            //await authService.AssignPermissionsToRoleAsync(role.Id, new AssignPermissionsRequest
-            //{
-            //    Permissions = request.Permissions.Select(x => new PermissionIdentity
-            //    {
-            //        Name = x,
-            //        Identifier = authOptions.Audience
-            //    }).ToList()
-            //}, cancellationToken);
+            await authService.AssignPermissionsToRoleAsync(
+                role.Id,
+                new AssignPermissionsRequest
+                {
+                    Permissions = request.Permissions
+                        .Select(x => new PermissionIdentity { Name = x, Identifier = authOptions.Audience })
+                        .ToList()
+                },
+                cancellationToken
+            );
 
-            return await identityService.CreateIdentityRole(
-                request.Id,
+            await identityService.UpdateIdentityRole(
+                role.Id,
                 request,
                 requestIdentity.GetUserId().GetValueOrDefault(),
                 cancellationToken

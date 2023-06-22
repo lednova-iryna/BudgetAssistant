@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Assistants.Budget.BE.API.Tests.Mocks;
-using Assistants.Budget.BE.Modules.Database.Options;
 using Assistants.Budget.BE.Modules.Auth.Models;
+using Assistants.Budget.BE.Modules.Database.Options;
 using Assistants.Libs.AspNetCore.Auth.Permissions;
 using MongoDB.Driver;
 
@@ -41,7 +41,11 @@ public partial class IdentityController : IClassFixture<WebAppFactoryMock<Progra
                 new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.RoleCanCreate),
                 new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.RoleCanDelete),
                 new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.RoleCanEdit),
-                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.RoleCanRead)
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.RoleCanRead),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.UserCanCreate),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.UserCanDelete),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.UserCanEdit),
+                new Claim(AssistantsClaimTypes.Permissions, IdentityPermissions.UserCanRead)
             }
         );
         appHttpClient.DefaultRequestHeaders.Authorization = new(JwtBearerDefaults.AuthenticationScheme, accessToken);

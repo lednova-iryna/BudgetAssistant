@@ -24,16 +24,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Assistants.Budget.BE.Modules.Auth\Assistants.Budget.BE.Modules.Auth.csproj">
+    <ProjectReference
+      Include="..\Assistants.Budget.BE.Modules.Auth\Assistants.Budget.BE.Modules.Auth.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Assistants.Budget.BE.Modules.Transactions\Assistants.Budget.BE.Modules.Transactions.csproj">
+    <ProjectReference
+      Include="..\Assistants.Budget.BE.Modules.Transactions\Assistants.Budget.BE.Modules.Transactions.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Assistants.Libs.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj">
+    <ProjectReference
+      Include="..\Assistants.Libs.Aws.Parameters\Assistants.Libs.Aws.Parameters.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Assistants.Libs.AspNetCore.Auth\Assistants.Libs.AspNetCore.Auth.csproj">
+    <ProjectReference
+      Include="..\Assistants.Libs.AspNetCore.Auth\Assistants.Libs.AspNetCore.Auth.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference
+      Include="..\Assistants.Libs.Caching.MongoDistributedCache\Assistants.Libs.Caching.MongoDistributedCache.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

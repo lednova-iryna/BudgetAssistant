@@ -11,7 +11,10 @@ namespace Assistants.Budget.BE.API.Tests.Identity;
 
 public partial class IdentityController
 {
-    [Fact(DisplayName = "Create Valid IdentityUser With Status As String")]
+    [Fact(
+        DisplayName = "Create Valid IdentityUser With Status As String",
+        Skip = "Need to implement Auth0 Management API mocks"
+    )]
     public async Task CreateIdentityUser()
     {
         #region Prepare Data
@@ -32,7 +35,7 @@ public partial class IdentityController
         var createUserCommand = new IdentityUserCreateCommand
         {
             UserName = "TestUser",
-            Roles = new List<Guid> { role.Id }
+            Roles = new List<string> { role.Id }
         };
         var jsonCommand = JsonConvert.SerializeObject(createUserCommand, new StringEnumConverter());
 
@@ -48,12 +51,13 @@ public partial class IdentityController
         Assert.Contains(role.Id, identityUser.Roles);
     }
 
-    [Fact(DisplayName = "Get Valid IdentityUser")]
+    [Fact(DisplayName = "Get Valid IdentityUser", Skip = "Need to implement Auth0 Management API mocks")]
     public async Task GetIdentityUser()
     {
         #region Prepare Data
         var createRoleCommand = new IdentityRoleCreateCommand()
         {
+            Id = Guid.NewGuid().ToString(),
             Name = "TestIdentityRole",
             Permissions = new List<string>
             {
@@ -63,12 +67,16 @@ public partial class IdentityController
         };
 
         var createRoleResponse = await appHttpClient.PutAsJsonAsync($"{rootUrl}/roles", createRoleCommand);
+        var responseString = await createRoleResponse.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.Created, createRoleResponse.StatusCode);
         var role = await createRoleResponse.Content.ReadFromJsonAsync<IdentityRole>();
 
         var createUserCommand = new IdentityUserCreateCommand
         {
             UserName = "TestUser",
-            Roles = new List<Guid> { role.Id }
+            Roles = new List<string> { role.Id },
+            Email = "TestUser@TestUser.com",
+            Password = "Qwerty1!"
         };
         var jsonCommand = JsonConvert.SerializeObject(createUserCommand, new StringEnumConverter());
 
@@ -76,6 +84,7 @@ public partial class IdentityController
             $"{rootUrl}/users",
             new StringContent(jsonCommand, encoding: Encoding.UTF8, mediaType: "application/json")
         );
+        responseString = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         #endregion
 

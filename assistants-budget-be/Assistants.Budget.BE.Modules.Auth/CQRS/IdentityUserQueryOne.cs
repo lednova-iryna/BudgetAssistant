@@ -6,7 +6,7 @@ namespace Assistants.Budget.BE.Modules.Auth.CQRS;
 
 public class IdentityUserQueryOne : IRequest<IdentityUser>
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     private class Validator : AbstractValidator<IdentityUserQueryOne>
     {

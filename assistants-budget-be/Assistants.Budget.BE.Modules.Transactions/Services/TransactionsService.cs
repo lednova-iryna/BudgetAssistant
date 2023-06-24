@@ -77,4 +77,9 @@ internal class TransactionsService
 
         return await dbQuery.ToListAsync(cancellationToken);
     }
+
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        await GetCollection().DeleteOneAsync(x => x.Id == id, cancellationToken: cancellationToken);
+    }
 }

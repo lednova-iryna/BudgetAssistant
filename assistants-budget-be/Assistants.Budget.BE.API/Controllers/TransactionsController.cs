@@ -45,4 +45,13 @@ public class TransactionsController : ControllerBase
         var transaction = await mediator.Send(command);
         return Created($"transactions/{transaction.Id}", transaction);
     }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(Transaction), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(IEnumerable<ValidationErrorResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteAsync(Guid id)
+    {
+        await mediator.Send(new TransactionsDeleteCommand { TransactionId = id });
+        return NoContent();
+    }
 }

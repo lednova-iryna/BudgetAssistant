@@ -70,7 +70,7 @@ To get started with tests, follow the steps below:
 >___
 
 ## Tests coverage 
-Tests coverage can be reviewed by [link](https://htmlpreview.github.io/?https://github.com/lednova-irina/BudgetAssistant/tree/develop/assistants-budget-be/Assistants.Budget.BE.API.Tests/CoverageReport/index.htm) 
+Tests coverage can be reviewed by [link](https://htmlpreview.github.io/?https://github.com/lednova-irina/BudgetAssistant/blob/develop/assistants-budget-be/Assistants.Budget.BE.API.Tests/CoverageReport/index.htm) 
 | Name            | Badge                                                         |
 | --------------- | ------------------------------------------------------------- |
 | Combined        | ![Combined](./CoverageReport/badge_combined.svg)              |

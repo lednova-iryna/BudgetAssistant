@@ -2,9 +2,11 @@
 using Microsoft.OpenApi.Models;
 using Assistants.Budget.BE.Options;
 using Assistants.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Assistants.Budget.BE.API.Configurators;
 
+[ExcludeFromCodeCoverage]
 static class SwaggerConfigurator
 {
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration)

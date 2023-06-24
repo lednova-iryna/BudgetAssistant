@@ -12,8 +12,8 @@ The Assistants: Budget is a project designed to help individuals and families tr
     - [Setup locally](#setup-locally)
   - [Initial brand-new setup](#initial-brand-new-setup)
   - [Setup new env](#setup-new-env)
+- [Tests](#tests)
 - [BudgetAssistantUI](#budgetassistantui)
-- [Backend configuration](#backend-configuration)
 - [Auth0 Configuration](#auth0-configuration)
 
 
@@ -142,9 +142,11 @@ As an initial setup for a fresh environment, before executing Terraform scripts 
 TODO:
 - Describe: Create ECR (using terraform, comment everything else), builde and deploy BE with actions to ECR, run all other terraforms.
 
-# BudgetAssistantUI
+# Tests
 
-# Backend configuration
+[API integration tests](./assistants-budget-be/Assistants.Budget.BE.API.Tests/README.md)
+
+# BudgetAssistantUI
 
 # Auth0 Configuration
 TODO: Describe usage of assistants-budget-auth0 for sync Auth0 configurations and store them in GitHub

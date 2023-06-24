@@ -1,4 +1,5 @@
-﻿using Assistants.Budget.BE.API.Configurators;
+﻿using System.Diagnostics.CodeAnalysis;
+using Assistants.Budget.BE.API.Configurators;
 using Assistants.Budget.BE.API.Middlewares;
 using Assistants.Budget.BE.API.Services;
 using Assistants.Budget.BE.Modules.Core;
@@ -73,6 +74,7 @@ app.UseSwagger(generalOptions.IsSwaggerEnabled);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 
 app.MapGet(
     "/",

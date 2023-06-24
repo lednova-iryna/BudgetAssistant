@@ -16,12 +16,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.2.0">
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
     <PackageReference Include="Moq" Version="4.18.4" />
+    <PackageReference Include="ReportGenerator" Version="5.1.22" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Assistants.Budget.BE.API\Assistants.Budget.BE.API.csproj" />

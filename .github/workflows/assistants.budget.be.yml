@@ -34,7 +34,7 @@ jobs:
         working-directory: .
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -99,7 +99,7 @@ jobs:
           echo "TF_CHDIR=${{ inputs.environment }}/assistants-budget-be-api-lambda" >> "$GITHUB_ENV"
 
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set GIT Commit SHA 
         id: vars
